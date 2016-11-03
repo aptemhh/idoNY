@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "AUTHORIZATION")
-@NamedQuery(name = "getLogin",query = "select l from org.idony.model.Login l")
+@NamedQuery(name = "getLogins",query = "select login from org.idony.model.Login l order by login")
 public class Login implements Serializable {
     String login;
     String password;

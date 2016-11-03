@@ -2,13 +2,17 @@ package us.sosia.video.stream.agent;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -37,7 +41,8 @@ public class StreamServerAgent implements IStreamServerAgent{
 	protected ExecutorService encodeWorker;
 	protected int FPS = 25;
 	protected ScheduledFuture<?> imageGrabTaskFuture;
-	public StreamServerAgent(Webcam webcam, Dimension dimension) {
+	List<InetSocketAddress> socketAddresses;
+	public StreamServerAgent(Webcam webcam, Dimension dimension, List<InetSocketAddress> socketAddresses) {
 		super();
 		this.webcam = webcam;
 		this.dimension = dimension;
@@ -52,6 +57,7 @@ public class StreamServerAgent implements IStreamServerAgent{
 		this.timeWorker = new ScheduledThreadPoolExecutor(1);
 		this.encodeWorker = Executors.newSingleThreadExecutor();
 		this.h264StreamEncoder = new H264StreamEncoder(dimension, false);
+		this.socketAddresses = socketAddresses;
 	}	
 	
 	
@@ -84,18 +90,25 @@ public class StreamServerAgent implements IStreamServerAgent{
 	private class StreamServerListenerIMPL implements StreamServerListener{
 
 
-		public void onClientConnectedIn(Channel channel) {
-			//here we just start to stream when the first client connected in
-			//
+		public void onClientConnectedIn(final Channel channel) {
+			if (!socketAddresses.stream().anyMatch(new Predicate<InetSocketAddress>() {
+				public boolean test(InetSocketAddress inetSocketAddress) {
+					return inetSocketAddress.getAddress().getCanonicalHostName().equals(channel.getLocalAddress().toString());
+				}
+			}))
+			{
+				//return;
+			}
+
 			channelGroup.add(channel);
 			if (!isStreaming) {
 				//do some thing
 				Runnable imageGrabTask = new ImageGrabTask();
-				ScheduledFuture<?> imageGrabFuture = 
+				ScheduledFuture<?> imageGrabFuture =
 						timeWorker.scheduleWithFixedDelay(imageGrabTask,
-						0,
-						1000/FPS,
-						TimeUnit.MILLISECONDS);
+								0,
+								1000 / FPS,
+								TimeUnit.MILLISECONDS);
 				imageGrabTaskFuture = imageGrabFuture;
 				isStreaming = true;
 			}

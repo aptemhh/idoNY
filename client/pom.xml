@@ -41,11 +41,7 @@
         <artifactId>slf4j-jdk14</artifactId>
         <version>1.7.3</version>
     </dependency>
-    <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty</artifactId>
-        <version>3.6.10.Final</version>
-    </dependency>
+
     <dependency>
         <groupId>net.coobird</groupId>
         <artifactId>thumbnailator</artifactId>
@@ -58,6 +54,24 @@
         <version>1.0.9</version>
         <scope>provided</scope>
     </dependency>
+
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty</artifactId>
+        <version>3.6.10.Final</version>
+    </dependency>
+    <dependency>
+        <groupId>org.jboss.netty</groupId>
+        <artifactId>netty</artifactId>
+        <version>3.2.9.Final</version>
+    </dependency>
+    <dependency>
+        <groupId>org.jboss.netty</groupId>
+        <artifactId>netty</artifactId>
+        <version>3.2.9.Final</version>
+    </dependency>
+
+
 </dependencies>
 
 </project>
