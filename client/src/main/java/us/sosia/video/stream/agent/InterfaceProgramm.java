@@ -42,7 +42,7 @@ public abstract class InterfaceProgramm {
 
     public void createTranslator(InetSocketAddress inetSocketAddress,Webcam webcam)
     {
-        StreamServerAgent serverAgent = new StreamServerAgent(webcam, dimension,asseptAddressList);
+        serverAgent = new StreamServerAgent(webcam, dimension,asseptAddressList);
         serverAgent.start(inetSocketAddress);
         logger.error("Стартовала трансляция");
     }

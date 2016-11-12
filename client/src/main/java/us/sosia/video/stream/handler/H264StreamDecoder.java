@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import ch.qos.logback.classic.Logger;
+import com.xuggle.xuggler.*;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -15,12 +16,7 @@ import org.slf4j.LoggerFactory;
 import us.sosia.video.stream.handler.frame.FrameDecoder;
 
 import com.xuggle.ferry.IBuffer;
-import com.xuggle.xuggler.ICodec;
-import com.xuggle.xuggler.IPacket;
-import com.xuggle.xuggler.IPixelFormat;
-import com.xuggle.xuggler.IStreamCoder;
 import com.xuggle.xuggler.IStreamCoder.Direction;
-import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.ConverterFactory.Type;
 import com.xuggle.xuggler.video.IConverter;
@@ -138,9 +134,6 @@ public class H264StreamDecoder extends OneToOneDecoder {
 						IConverter converter = ConverterFactory.createConverter(type
 							.getDescriptor(), picture);
 						BufferedImage image = converter.toImage(picture);
-						// BufferedImage convertedImage = ImageUtils.convertToType(image,
-						// BufferedImage.TYPE_3BYTE_BGR);
-						// here ,put out the image
 						if (streamFrameListener != null) {
 							streamFrameListener.onFrameReceived(image);
 						}
@@ -220,8 +213,6 @@ public class H264StreamDecoder extends OneToOneDecoder {
 						IConverter converter = ConverterFactory.createConverter(type
 							.getDescriptor(), picture);
 						BufferedImage image = converter.toImage(picture);
-						// BufferedImage convertedImage = ImageUtils.convertToType(image,
-						// BufferedImage.TYPE_3BYTE_BGR);
 						// here ,put out the image
 						if (streamFrameListener != null) {
 							streamFrameListener.onFrameReceived(image);
