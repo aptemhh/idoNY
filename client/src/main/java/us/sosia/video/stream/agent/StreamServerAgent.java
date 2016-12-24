@@ -12,8 +12,10 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
+import com.xuggle.ferry.IBuffer;
+import com.xuggle.xuggler.IAudioSamples;
+import org.apache.axis.utils.ByteArrayOutputStream;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.group.ChannelGroup;
@@ -28,21 +30,23 @@ import us.sosia.video.stream.handler.StreamServerListener;
 
 import com.github.sarxos.webcam.Webcam;
 
+import javax.sound.sampled.*;
+
 public class StreamServerAgent implements IStreamServerAgent{
 	protected final static Logger logger = LoggerFactory.getLogger(StreamServer.class);
 	protected final Webcam webcam;
 	protected final Dimension dimension;
 	protected final ChannelGroup channelGroup = new DefaultChannelGroup();
 	protected final ServerBootstrap serverBootstrap;
-	//I just move the stream encoder out of the channel pipeline for the performance
+
 	protected final H264StreamEncoder h264StreamEncoder;
 	protected volatile boolean isStreaming;
 	protected ScheduledExecutorService timeWorker;
 	protected ExecutorService encodeWorker;
 	protected int FPS = 25;
 	protected ScheduledFuture<?> imageGrabTaskFuture;
-	List<InetSocketAddress> socketAddresses;
-	public StreamServerAgent(Webcam webcam, Dimension dimension, List<InetSocketAddress> socketAddresses) {
+	List<String> socketAddresses;
+	public StreamServerAgent(Webcam webcam, Dimension dimension, List<String> socketAddresses) {
 		super();
 		this.webcam = webcam;
 		this.dimension = dimension;
@@ -91,13 +95,14 @@ public class StreamServerAgent implements IStreamServerAgent{
 
 
 		public void onClientConnectedIn(final Channel channel) {
-			if (!socketAddresses.stream().anyMatch(new Predicate<InetSocketAddress>() {
-				public boolean test(InetSocketAddress inetSocketAddress) {
-					return inetSocketAddress.getAddress().getCanonicalHostName().equals(channel.getLocalAddress().toString());
+			if (!socketAddresses.stream().anyMatch(new Predicate<String>() {
+				public boolean test(String inetSocketAddress) {
+					return inetSocketAddress.equals(((InetSocketAddress)channel.getRemoteAddress()).getHostName());
 				}
 			}))
 			{
-				//return;
+				logger.info("Не известный Ip-адрес:" +channel.getLocalAddress().toString());
+				return;
 			}
 
 			channelGroup.add(channel);
@@ -140,9 +145,17 @@ public class StreamServerAgent implements IStreamServerAgent{
 		}
 		
 	}
-	
+	int t=0;
 	protected volatile long frameCount = 0;
-	
+		TargetDataLine microphone;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		int CHUNK_SIZE=48;
+		byte[] audioBuf;
+
+		final int channelCount = 1;
+		IAudioSamples smp;
+		AudioFormat audioFormat = new AudioFormat(8000.0f, 16, channelCount, true, false);
+		protected long startTime;
 	private class ImageGrabTask implements Runnable{
 
 
@@ -155,17 +168,47 @@ public class StreamServerAgent implements IStreamServerAgent{
 			/**
 			 * using this when the h264 encoder is inside this class
 			 * */
-			encodeWorker.execute(new EncodeTask(bufferedImage));
+//			DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
+//			try {
+//				microphone = (TargetDataLine) AudioSystem.getLine(info);
+//				microphone.open(audioFormat);
+//				microphone.start();
+//			} catch (LineUnavailableException e) {
+//				e.printStackTrace();
+//			}
+//			audioBuf= new byte[microphone.getBufferSize() / 5];
+//			if (microphone.available() == 88200)
+//			{
+//				int nBytesRead = microphone.read(audioBuf, 0, CHUNK_SIZE);//audioBuf.length);//aline.available());
+//				if (nBytesRead>0) {
+//					IBuffer iBuf = IBuffer.make(null, audioBuf, 0, nBytesRead);
+//
+//					smp = IAudioSamples.make(iBuf, channelCount, IAudioSamples.Format.swigToEnum(1));
+//
+//					if (smp != null) {
+//						long numSample = nBytesRead / smp.getSampleSize();
+//						long now = System.currentTimeMillis();
+//						if (startTime == 0) {
+//							startTime = now;
+//						}
+//						smp.setComplete(true, numSample, (int) audioFormat.getSampleRate(), audioFormat.getChannels(), IAudioSamples.Format.FMT_S16, (now - startTime)* 1000);
+//						smp.put(audioBuf, 1, 0,nBytesRead);
+//					}
+//				}
+//			}
+//			microphone.close();
+			encodeWorker.execute(new EncodeTask(bufferedImage, smp));
 		}
 		
 	}
 	
 	private class EncodeTask implements Runnable{
 		private final BufferedImage image;
-		
-		public EncodeTask(BufferedImage image) {
+		private final IAudioSamples audioSamples;
+		public EncodeTask(BufferedImage image, IAudioSamples audioSamples) {
 			super();
 			this.image = image;
+			this.audioSamples = audioSamples;
 		}
 
 
@@ -176,7 +219,6 @@ public class StreamServerAgent implements IStreamServerAgent{
 					channelGroup.write(msg);
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

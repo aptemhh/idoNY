@@ -5,7 +5,7 @@ public class StreamClient {
 
 	public static void main(String[] args) {
 
-		new InterfaceImp().startCl();
+		new InterfaceImp();
 
 	}
 
