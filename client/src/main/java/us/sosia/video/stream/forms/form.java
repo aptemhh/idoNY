@@ -1,18 +1,18 @@
 package us.sosia.video.stream.forms;
 
+import org.jboss.netty.buffer.BigEndianHeapChannelBuffer;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import us.sosia.video.stream.agent.InterfaceImp;
-import us.sosia.video.stream.agent.ui.ServerAdressAccept;
+import us.sosia.video.stream.agent.StreamServerAssept;
 import us.sosia.video.stream.agent.ui.VideoPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
-import java.net.NetworkInterface;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
 
 /**
  * Created by idony on 24.12.16.
@@ -23,41 +23,40 @@ public class form extends JFrame{
     private JButton button6456tyutyutyutuButton;
     private VideoPanel videoPanel=new VideoPanel();
     private InterfaceImp imp=new InterfaceImp();
-
+    private String keyServ="755423424dasd";
+    private String keyClient="755423424dasd";
     public form(){
         setContentPane(panel1);
         panel1.add(videoPanel, BorderLayout.CENTER);
         fghfghfghButton.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-
-                imp.startServerAdressAccept(new ServerAdressAccept() {
-                    ServerSocket serverSocket;
-                    public void init() throws IOException {
-                        serverSocket=new ServerSocket(15044);
-                    }
-
-                    public String run(String key) {
-                        Socket client=null;
-                        String keyClient=null;
-                        try {
-                            client= serverSocket.accept();
-                            keyClient=new DataInputStream(client.getInputStream()).readUTF();
-
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        if(key.equals(keyClient))
+                //region сервер предодобрения
+                try {
+                    new StreamServerAssept(new OneToOneDecoder() {
+                        @Override
+                        protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
+                            byte[] bytes=((BigEndianHeapChannelBuffer) msg).array();
+                            String keyClient = new String(bytes,2,bytes.length-2);
+                            if(keyServ.equals(keyClient))
                         {
                             System.out.println("Ключ совпал");
-                            return client.getLocalAddress().getCanonicalHostName();
+                            imp.addAsseptAddress (((InetSocketAddress)channel.getRemoteAddress()).getHostName());
                         }
                         else
                             System.out.println("Ключ не совпал");
-                        return "";
+                            return msg;
+                        }
                     }
-                });
+
+                    ).start(new InetSocketAddress(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(),15044));
+                } catch (SocketException e1) {
+                    e1.printStackTrace();
+                }
+                //endregion
+
                 imp.startTranslutor();
             }
         });
@@ -66,7 +65,7 @@ public class form extends JFrame{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 try {
-                    imp.connectServerAdressAccept(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement(),"qwe");
+                    imp.connectServerAdressAccept(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement(),keyClient);
                     imp.openTranslutor(videoPanel, NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20000);
 
                 } catch (SocketException e1) {

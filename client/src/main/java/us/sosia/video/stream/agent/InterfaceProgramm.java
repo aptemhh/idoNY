@@ -1,17 +1,13 @@
 package us.sosia.video.stream.agent;
 
 import com.github.sarxos.webcam.Webcam;
-import org.jboss.netty.channel.local.LocalAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.sosia.video.stream.agent.ui.ServerAdressAccept;
 import us.sosia.video.stream.handler.StreamFrameListener;
 
 import java.awt.*;
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.*;
 import java.util.List;
@@ -64,28 +60,7 @@ public abstract class InterfaceProgramm {
             }
         });
     }
-    public void startServerAdressAccept(final ServerAdressAccept serverAdressAccept)
-    {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    serverAdressAccept.init();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                for (;;)
-                {
-                    try {
-                        addAsseptAddress(serverAdressAccept.run(keyT));
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
 
-            }
-        }).start();
-    }
     public void connectServerAdressAccept(final InetAddress inetAddress,final String key)
     {
         new Thread(new Runnable() {
