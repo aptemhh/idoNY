@@ -1,13 +1,10 @@
 package org.idony;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.idony.model.Login;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

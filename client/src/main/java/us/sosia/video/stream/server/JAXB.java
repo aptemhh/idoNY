@@ -15,9 +15,9 @@ import java.io.*;
  * Created by idony on 01.01.17.
  */
 
-public class Connector {
+public class JAXB {
 
-    public static void marshal(StringWriter out, Object inputStream, Class... classes) throws JAXBException {
+    public static void marshal(Writer out, Object inputStream, Class... classes) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(classes);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -26,7 +26,7 @@ public class Connector {
 
     }
 
-    public static Object unmarshal(StringReader inputStream, Class... classes) throws JAXBException {
+    public static Object unmarshal(Reader inputStream, Class... classes) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(classes);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         return jaxbUnmarshaller.unmarshal(inputStream);
@@ -43,23 +43,18 @@ public class Connector {
         mess.setData(createT);
         StringWriter outputStream = new StringWriter();
 
-
-        try {
-            marshal(outputStream, mess, Message.class, CreateT.class);
-            System.out.println(outputStream.getBuffer());
-            outputStream = new StringWriter();
-            ConnectT connectT=new ConnectT();
-            connectT.setaBoolean(false);
-            mess.setData(connectT);
-            mess.setType(ConnectT.class.getName());
-            marshal(outputStream, mess, Message.class, ConnectT.class);
-            System.out.println(outputStream.getBuffer());
-            Message message=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class);
-            Message message2=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class,Class.forName(message.getType()));
-
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+////            marshal(outputStream, mess, Message.class, CreateT.class);
+//            System.out.println(outputStream.getBuffer());
+////            marshal(outputStream, mess, Message.class, ConnectT.class);
+//            System.out.println(outputStream.getBuffer());
+//            Message message=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class);
+//            Message message2=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class,Class.forName(message.getType()));
+//
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
