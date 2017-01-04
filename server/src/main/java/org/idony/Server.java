@@ -21,6 +21,8 @@ import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
+import org.idony.listners.ConnectTListner;
+import org.idony.listners.MessageListners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.sosia.video.stream.server.models.ConnectTO;
@@ -42,7 +44,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by idony on 02.01.17.
  */
-public class Server {
+public class Server extends MessageListners{
     protected final static Logger logger = LoggerFactory.getLogger(Server.class);
     protected ServerBootstrap b;
 Integer i=0;
@@ -61,6 +63,7 @@ Integer i=0;
 
                         pipeline.addLast("framer", new ByteToMessageDecoder() {
                             int o;
+
                             public Object decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
                                 String keyClient = new String(byteBuf.array());
                                 byteBuf.clear();
@@ -73,6 +76,9 @@ Integer i=0;
                                     try {
                                         message = (Message) JAXB.unmarshal(new StringReader(mes), Message.class);
                                         message2 = (Message) JAXB.unmarshal(new StringReader(mes), Message.class, Class.forName(message.getType()));
+                                        if (channelHandlerContext.channel().isOpen()) {
+                                            submitLisners(message2, channelHandlerContext);
+                                        }
                                     } catch (JAXBException e) {
                                         e.printStackTrace();
                                         return null;
@@ -81,28 +87,13 @@ Integer i=0;
                                         return null;
                                     }
 
-                                    Message messO = new Message();
-                                    ConnectTO connectTO = new ConnectTO();
-                                    connectTO.setIp((++i).toString());
-                                    connectTO.setPort(1243);
-                                    messO.setData(connectTO);
-                                    messO.setType(ConnectTO.class.getName());
-                                    StringWriter stringWriter = new StringWriter();
-                                    try {
-                                        JAXB.marshal(stringWriter, messO, Message.class, ConnectTO.class);
-                                        if (channelHandlerContext.channel().isOpen()) {
-                                            channelHandlerContext.write(stringWriter.getBuffer().toString());
-                                        }
-                                        logger.info("Отправил ответ:\n-----{}-------", stringWriter.getBuffer().toString());
-                                    } catch (JAXBException e) {
-                                        e.printStackTrace();
-                                    }
+
                                 }
                                 return null;
                             }
 
                         });
-                        pipeline.addLast("framer3", new ChannelHandler(){
+                        pipeline.addLast("framer3", new ChannelHandler() {
                             public void beforeAdd(ChannelHandlerContext channelHandlerContext) throws Exception {
                                 logger.info("Подключился :{}", channelHandlerContext.channel().remoteAddress());
                             }
@@ -152,6 +143,7 @@ Integer i=0;
 
     public static void main(String[] bud) throws SocketException, InterruptedException {
         Server server = new Server();
+        server.addListner(new ConnectTListner());
         server.start(20001);
     }
 }

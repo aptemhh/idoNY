@@ -35,21 +35,22 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 02.01.17.
  */
-public class ConnectorServer {
+public class ConnectorServer extends MessageListners{
     protected final static Logger logger = LoggerFactory.getLogger(StreamClientAgent.class);
     protected final Bootstrap clientBootstrap;
     protected Channel clientChannel;
-
+    EventLoopGroup bossGroup;
 
     public ConnectorServer() {
         super();
         this.clientBootstrap = new Bootstrap();
 
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup();
         this.clientBootstrap.group(bossGroup)
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
@@ -74,7 +75,7 @@ public class ConnectorServer {
                                 try {
                                     message = (Message) JAXB.unmarshal(new StringReader(keyClient), Message.class);
                                     message2 = (Message) JAXB.unmarshal(new StringReader(keyClient), Message.class, Class.forName(message.getType()));
-
+                                    submitLisners(message2);
                                 } catch (JAXBException e) {
                                     e.printStackTrace();
                                 } catch (ClassNotFoundException e) {
@@ -107,56 +108,50 @@ public class ConnectorServer {
 
 
     public void stop() {
+        try {
+            clientChannel.closeFuture().sync();
+            bossGroup.shutdown();
+            clientChannel.close().awaitUninterruptibly();
 
-        clientChannel.close();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public synchronized boolean write(StringWriter stringWriter) {
-        logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
+    public synchronized boolean write(Object mess,Class... classes) {
+
         if (clientChannel != null) {
 
-            ChannelFuture future=null;
-            future = clientChannel.write(stringWriter.getBuffer().toString());
-
-            return true;
+            try {
+                StringWriter stringWriter = new StringWriter();
+                JAXB.marshal(stringWriter, mess, classes);
+                ChannelFuture future=null;
+                future = clientChannel.write(stringWriter.getBuffer().toString());
+                logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
+                return true;
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
 
 
     public static void main(String[] bud) throws SocketException {
-        Message mess = new Message();
-        mess.setType(CreateT.class.getName());
-        CreateT createT = new CreateT();
-        createT.setIp("1..2.3.3");
-        mess.setLogin("login1");
-        mess.setPass("pass1");
-        mess.setData(createT);
-        StringWriter outputStream = new StringWriter();
-        try {
-            JAXB.marshal(outputStream, mess, Message.class, CreateT.class);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+
         ConnectorServer connectorServer = new ConnectorServer();
 
         connectorServer.connect(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20001);
 
-        for (; connectorServer.clientChannel == null; ) ;
-        connectorServer.write(outputStream);
-
-        createT.setIp("123.123.123.1213");
-        mess.setData(createT);
-        outputStream=new StringWriter();
-        try {
-            JAXB.marshal(outputStream, mess, Message.class, CreateT.class);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        ConnectTListner connectTListner=new ConnectTListner();
+        connectorServer.addListner(connectTListner);
         try {
             Thread.sleep(10000);
-            connectorServer.write(outputStream);
+            connectTListner.BisnessLogic(connectorServer);
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
             e.printStackTrace();
         }
         connectorServer.stop();

@@ -2,6 +2,7 @@ package us.sosia.video.stream.server.models;
 
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.UUID;
 
 /**
  * Created by idony on 01.01.17.
@@ -10,6 +11,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Message {
     String type;
     Data data;
+    UUID uuid;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
     public String getType() {
         return type;
@@ -22,7 +32,6 @@ public class Message {
     public void setData(Data data) {
         this.data = data;
     }
-
 
     public void setType(String type) {
         this.type = type;
