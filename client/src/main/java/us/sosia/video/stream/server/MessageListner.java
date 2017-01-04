@@ -15,14 +15,12 @@ public abstract class MessageListner {
     protected final static Logger logger = LoggerFactory.getLogger(MessageListner.class);
     static UUID current = null;
     static final Object monitor = new Object();
-    static boolean ready = false;
 
     public void Notify()
     {
         synchronized (monitor) {
-            ready = true;
-
             monitor.notify();
+            current=null;
         }
     }
     int i=0;
@@ -30,7 +28,7 @@ public abstract class MessageListner {
     public void Wait(long l) throws TimeoutException {
         synchronized (monitor) {
             i=0;
-            while (!ready) {
+            while (current!=null) {
                 try {
                     if(l<0)monitor.wait();
                     else

@@ -17,7 +17,7 @@ public class ConnectTListner extends MessageListner {
 
 
     public void reader(Message message) {
-
+        if(message==null||message.getUuid()==null||current==null)return;
         if(message.getData()!=null&&message.getData() instanceof ConnectT)
         {
             if(current.equals(message.getUuid()))
