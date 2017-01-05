@@ -37,7 +37,7 @@ public class ConnectTListner extends MessageListner {
         mess.setLogin("admin");
         mess.setPass("pass1");
         mess.setData(createT);
-        connectorServer.write(mess, Message.class, ConnectTS.class);
+        connectorServer.write(mess);
         Wait(-1l);
         System.out.println("DOOOOOOOOOOOOOOOOOOOOOD");
     }

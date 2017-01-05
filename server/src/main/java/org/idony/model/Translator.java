@@ -10,7 +10,14 @@ import java.util.List;
 @Entity
 @Table(name = "translator")
 public class Translator implements Serializable {
+    public Translator(Long id) {
+        this.id = id;
+    }
+
     Long id;
+
+    public Translator() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

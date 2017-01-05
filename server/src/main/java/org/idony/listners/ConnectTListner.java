@@ -37,10 +37,14 @@ public class ConnectTListner implements MessageListner {
                     .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 
             mess = new Message();
-            if(connectors.size()==0)return mess;
-            Translator translator=connectors.get(0).getIdTranslator();
+
             mess.setType(ConnectTC.class.getName());
             mess.setUuid(message.getUuid());
+
+            if(connectors.size()==0)return mess;
+
+            Translator translator=connectors.get(0).getIdTranslator();
+
             ConnectTC connectTC=new ConnectTC();
             connectTC.setIp(translator.getIp());
             connectTC.setPort(translator.getPort());

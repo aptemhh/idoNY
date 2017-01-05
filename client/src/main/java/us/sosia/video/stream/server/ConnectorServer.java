@@ -25,11 +25,16 @@ import us.sosia.video.stream.agent.StreamClientAgent;
 import us.sosia.video.stream.server.listners.ConnectTListner;
 import us.sosia.video.stream.server.listners.CreateTListner;
 import us.sosia.video.stream.server.listners.MessageListners;
+import us.sosia.video.stream.server.listners.SettingTListner;
 import us.sosia.video.stream.server.models.Message;
+import us.sosia.video.stream.server.models.SettingTC;
+import us.sosia.video.stream.server.models.SettingTSO;
 
 import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.net.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -113,13 +118,13 @@ public class ConnectorServer extends MessageListners {
 
     }
 
-    public synchronized boolean write(Object mess,Class... classes) {
+    public synchronized boolean write(Object mess) {
 
         if (clientChannel != null) {
 
             try {
                 StringWriter stringWriter = new StringWriter();
-                JAXB.marshal(stringWriter, mess, classes);
+                JAXB.marshal(stringWriter, mess, mess.getClass(),((Message)mess).getData().getClass());
                 ChannelFuture future=null;
                 future = clientChannel.write(stringWriter.getBuffer().toString());
                 logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
@@ -143,12 +148,27 @@ public class ConnectorServer extends MessageListners {
 
         ConnectTListner connectTListner=new ConnectTListner();
         CreateTListner createTListner =new CreateTListner();
+        SettingTListner settingTListner =new SettingTListner();
         connectorServer.addListner(connectTListner);
         connectorServer.addListner(createTListner);
+        connectorServer.addListner(settingTListner);
         try {
             Thread.sleep(1000);
             //connectTListner.BisnessLogic(connectorServer);
-            createTListner.BisnessLogic(connectorServer);
+
+            List<String> strings = settingTListner.BisnessLogic(connectorServer);
+            strings.remove(0);
+            Message message=new Message();
+            message.setUuid(UUID.randomUUID());
+            message.setType(SettingTSO.class.getName());
+            message.setLogin("user");
+            SettingTSO settingTSO=new SettingTSO();
+            settingTSO.setLogins(strings);
+            settingTSO.setIdTranslator(1l);
+            message.setData(settingTSO);
+
+            connectorServer.write(message);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
