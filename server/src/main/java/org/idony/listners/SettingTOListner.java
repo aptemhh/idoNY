@@ -32,6 +32,7 @@ public class SettingTOListner implements MessageListner {
                     session.createCriteria(Translator.class).add(Restrictions.eq("login", new Login(message.getLogin()))).
                             add(Restrictions.eq("id", data.getIdTranslator()))
                             .list().size() != 0;
+            session.close();
             Connector connector;
             for (String s : data.getLogins()) {
                 connector = new Connector();

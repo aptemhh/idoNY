@@ -166,7 +166,7 @@ public class ConnectorServer extends MessageListners {
             settingTSO.setLogins(strings);
             settingTSO.setIdTranslator(1l);
             message.setData(settingTSO);
-
+            message.setPass("user");
             connectorServer.write(message);
 
         } catch (InterruptedException e) {

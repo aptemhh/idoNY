@@ -1,6 +1,7 @@
 package org.idony.listners;
 
 import io.netty.channel.ChannelHandlerContext;
+import org.idony.HibernateUtil;
 import org.idony.JAXB;
 import org.idony.Server;
 import org.slf4j.Logger;
@@ -27,6 +28,8 @@ public class MessageListners {
     }
     public void submitLisners(Message message,ChannelHandlerContext channelHandlerContext)
     {
+        if(!HibernateUtil.security(message.getLogin(), message.getPass()))
+            return;
         Message message1;
         for(MessageListner messageListner:listnerArray)
         {

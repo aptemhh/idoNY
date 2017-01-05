@@ -35,7 +35,7 @@ public class ConnectTListner implements MessageListner {
             session.createCriteria(Connector.class).add(Restrictions.eq("login", new Login(message.getLogin()))).
                     createCriteria("idTranslator").add(Restrictions.eq("login", new Login(data.getLogin())))
                     .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-
+            session.close();
             mess = new Message();
 
             mess.setType(ConnectTC.class.getName());

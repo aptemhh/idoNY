@@ -4,6 +4,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
+import org.idony.model.Login;
+import org.idony.model.Translator;
 
 import java.io.Serializable;
 import java.util.List;
@@ -61,6 +64,15 @@ public class HibernateUtil {
         // Close caches and connection pools
         getSessionFactory().close();
     }
-
+    public static Boolean security(String login,String pass)
+    {
+        SessionFactory sessionFactory = getSessionFactory();
+        Session session=sessionFactory.openSession();
+        Boolean connectors =
+                session.createCriteria(Login.class).add(Restrictions.eq("login", login)).
+                        add(Restrictions.eq("password", pass))
+                        .list().size() != 0;
+        return connectors;
+    }
 
 }
