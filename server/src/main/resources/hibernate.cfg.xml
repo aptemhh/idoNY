@@ -4,14 +4,18 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:hsqldb:file:/home/idony/Загрузки/idoNY/server/bd/bd</property>
-    <property name="hibernate.connection.username">sa</property>
-    <property name="hibernate.connection.password"></property>
+    <property name="connection.url">jdbc:hsqldb:file:/home/idony/Загрузки/idoNY/server/db/db</property>
+    <property name="hibernate.connection.username">user</property>
+    <property name="hibernate.connection.password">user</property>
     <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
     <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
     <property name="hibernate.show_sql">true</property>
     <property name="use_sql_comments">false</property>
     <property name="generate_statistics">false</property>
     <mapping class="org.idony.model.Login"/>
+    <mapping class="org.idony.model.Translator"/>
+    <mapping class="org.idony.model.Connector"/>
+
   </session-factory>
+
 </hibernate-configuration>

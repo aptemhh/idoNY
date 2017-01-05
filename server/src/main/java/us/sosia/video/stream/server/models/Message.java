@@ -1,5 +1,7 @@
 package us.sosia.video.stream.server.models;
 
+import com.sun.xml.txw2.annotation.XmlAttribute;
+import com.sun.xml.txw2.annotation.XmlElement;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.UUID;
@@ -12,7 +14,7 @@ public class Message {
     String type;
     Data data;
     UUID uuid;
-
+    @XmlElement
     public UUID getUuid() {
         return uuid;
     }
@@ -20,7 +22,7 @@ public class Message {
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
-
+    @XmlElement
     public String getType() {
         return type;
     }
@@ -28,11 +30,12 @@ public class Message {
     public Data getData() {
         return data;
     }
-
+    @XmlElement
     public void setData(Data data) {
         this.data = data;
     }
 
+    @XmlAttribute
     public void setType(String type) {
         this.type = type;
     }
@@ -42,7 +45,7 @@ public class Message {
     public String getLogin() {
         return login;
     }
-
+    @XmlElement
     public void setLogin(String login) {
         this.login = login;
     }
@@ -50,7 +53,7 @@ public class Message {
     public String getPass() {
         return pass;
     }
-
+    @XmlElement
     public void setPass(String pass) {
         this.pass = pass;
     }

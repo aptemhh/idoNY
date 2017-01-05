@@ -11,8 +11,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 
-import io.netty.util.concurrent.AbstractEventExecutorGroup;
-
 import io.netty.channel.socket.SocketChannel;
 
 import io.netty.channel.socket.nio.NioEventLoopGroup;
@@ -23,25 +21,21 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.sosia.video.stream.agent.IStreamClientAgent;
 import us.sosia.video.stream.agent.StreamClientAgent;
-import us.sosia.video.stream.handler.*;
-import us.sosia.video.stream.server.models.ConnectTO;
-import us.sosia.video.stream.server.models.CreateT;
+import us.sosia.video.stream.server.listners.ConnectTListner;
+import us.sosia.video.stream.server.listners.CreateTListner;
+import us.sosia.video.stream.server.listners.MessageListners;
 import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBException;
-import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 02.01.17.
  */
-public class ConnectorServer extends MessageListners{
+public class ConnectorServer extends MessageListners {
     protected final static Logger logger = LoggerFactory.getLogger(StreamClientAgent.class);
     protected final Bootstrap clientBootstrap;
     protected Channel clientChannel;
@@ -76,7 +70,7 @@ public class ConnectorServer extends MessageListners{
                                 try {
                                     message = (Message) JAXB.unmarshal(new StringReader(keyClient), Message.class);
                                     message2 = (Message) JAXB.unmarshal(new StringReader(keyClient), Message.class, Class.forName(message.getType()));
-                                    submitLisners(message2);
+                                    submitLisners(message2,channelHandlerContext);
                                 } catch (JAXBException e) {
                                     e.printStackTrace();
                                 } catch (ClassNotFoundException e) {
@@ -95,13 +89,17 @@ public class ConnectorServer extends MessageListners{
     }
 
 
-    public void connect(String ip,Integer port) {
+    public void connect(String ip,Integer port) throws Exception {
         logger.info("going to connect to stream server :{}", ip+":"+port);
         clientBootstrap.remoteAddress(ip,port);
         try {
             clientChannel= clientBootstrap.connect().sync().channel();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
+        }
+        catch (Exception e)
+        {
+            throw  e;
         }
 
 
@@ -110,10 +108,8 @@ public class ConnectorServer extends MessageListners{
 
     public void stop() {
 
-
+        clientChannel.close().awaitUninterruptibly();
             bossGroup.shutdown();
-
-            clientChannel.close().awaitUninterruptibly();
 
     }
 
@@ -136,17 +132,23 @@ public class ConnectorServer extends MessageListners{
     }
 
 
-    public static void main(String[] bud) throws SocketException {
+    public static void main(String[] bud)  {
 
         ConnectorServer connectorServer = new ConnectorServer();
 
-        connectorServer.connect(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20001);
+        try {
+            connectorServer.connect(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20001);
+        }catch (Exception e) {
+        }
 
         ConnectTListner connectTListner=new ConnectTListner();
+        CreateTListner createTListner =new CreateTListner();
         connectorServer.addListner(connectTListner);
+        connectorServer.addListner(createTListner);
         try {
             Thread.sleep(1000);
-            connectTListner.BisnessLogic(connectorServer);
+            //connectTListner.BisnessLogic(connectorServer);
+            createTListner.BisnessLogic(connectorServer);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {

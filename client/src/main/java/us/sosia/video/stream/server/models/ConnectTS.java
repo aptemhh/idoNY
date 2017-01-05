@@ -8,14 +8,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by idony on 01.01.17.
  */
 @XmlRootElement
-public class ConnectT extends Data {
-    Boolean aBoolean;
+public class ConnectTS extends Data {
+    String login;
 
-    public Boolean getaBoolean() {
-        return aBoolean;
+    public String getLogin() {
+        return login;
     }
     @XmlElement
-    public void setaBoolean(Boolean aBoolean) {
-        this.aBoolean = aBoolean;
+    public void setLogin(String login) {
+        this.login = login;
     }
 }

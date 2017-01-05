@@ -1,8 +1,5 @@
 package us.sosia.video.stream.server;
 
-import us.sosia.video.stream.server.models.ConnectT;
-import us.sosia.video.stream.server.models.CreateT;
-import us.sosia.video.stream.server.models.Data;
 import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBContext;
@@ -34,20 +31,20 @@ public class JAXB {
 
     public static void main(String[] array) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
 
-        Message mess = new Message();
-        mess.setType(CreateT.class.getName());
-        CreateT createT = (CreateT) Class.forName(CreateT.class.getName()).newInstance();
-        createT.setIp("1..2.3.3");
-        mess.setLogin("login1");
-        mess.setPass("pass1");
-        mess.setData(createT);
+//        Message mess = new Message();
+//        mess.setType(CreateT.class.getName());
+//        CreateT createT = (CreateT) Class.forName(CreateT.class.getName()).newInstance();
+//        createT.setIp("1..2.3.3");
+//        mess.setLogin("login1");
+//        mess.setPass("pass1");
+//        mess.setData(createT);
         StringWriter outputStream = new StringWriter();
 
 //
 //        try {
 ////            marshal(outputStream, mess, Message.class, CreateT.class);
 //            System.out.println(outputStream.getBuffer());
-////            marshal(outputStream, mess, Message.class, ConnectT.class);
+////            marshal(outputStream, mess, Message.class, ConnectTS.class);
 //            System.out.println(outputStream.getBuffer());
 //            Message message=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class);
 //            Message message2=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class,Class.forName(message.getType()));

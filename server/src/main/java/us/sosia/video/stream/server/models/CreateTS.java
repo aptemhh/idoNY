@@ -8,14 +8,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by idony on 01.01.17.
  */
 @XmlRootElement
-public class CreateT extends Data{
+public class CreateTS extends Data{
     String ip;
-
+    Integer port;
     public String getIp() {
         return ip;
     }
     @XmlElement
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+    @XmlElement
+    public void setPort(Integer port) {
+        this.port = port;
     }
 }

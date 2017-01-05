@@ -22,10 +22,10 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
 import org.idony.listners.ConnectTListner;
+import org.idony.listners.CreateTListner;
 import org.idony.listners.MessageListners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.sosia.video.stream.server.models.ConnectTO;
 import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBException;
@@ -144,6 +144,7 @@ Integer i=0;
     public static void main(String[] bud) throws SocketException, InterruptedException {
         Server server = new Server();
         server.addListner(new ConnectTListner());
+        server.addListner(new CreateTListner());
         server.start(20001);
     }
 }
