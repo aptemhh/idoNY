@@ -60,18 +60,18 @@ public class StreamClientAgent implements IStreamClientAgent{
 
 
 		public void onConnected(Channel channel) {
-		//	logger.info("stream connected to server at :{}",channel);
+			logger.info("stream connected to server at :{}",channel);
 			clientChannel = channel;
 		}
 
 
 		public void onDisconnected(Channel channel) {
-		//	logger.info("stream disconnected to server at :{}",channel);
+			logger.info("stream disconnected to server at :{}",channel);
 		}
 
 
 		public void onException(Channel channel, Throwable t) {
-		//	logger.debug("exception at :{},exception :{}",channel,t);
+			logger.debug("exception at :{},exception :{}",channel,t);
 		}
 
 

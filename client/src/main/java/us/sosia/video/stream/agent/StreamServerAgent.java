@@ -33,7 +33,7 @@ import com.github.sarxos.webcam.Webcam;
 import javax.sound.sampled.*;
 
 public class StreamServerAgent implements IStreamServerAgent{
-	protected final static Logger logger = LoggerFactory.getLogger(StreamServer.class);
+	protected final static Logger logger = LoggerFactory.getLogger(StreamServerAgent.class);
 	protected final Webcam webcam;
 	protected final Dimension dimension;
 	protected final ChannelGroup channelGroup = new DefaultChannelGroup();
@@ -95,17 +95,16 @@ public class StreamServerAgent implements IStreamServerAgent{
 
 
 		public void onClientConnectedIn(final Channel channel) {
-			if (!socketAddresses.stream().anyMatch(new Predicate<String>() {
-				public boolean test(String inetSocketAddress) {
-					return inetSocketAddress.equals(((InetSocketAddress)channel.getRemoteAddress()).getHostName());
-				}
-			}))
+//			if (socketAddresses.stream().anyMatch(new Predicate<String>() {
+//				public boolean test(String inetSocketAddress) {
+//					return inetSocketAddress.equals(((InetSocketAddress)channel.getRemoteAddress()).getHostName());
+//				}
+//			}))
 			{
-				logger.info("Не известный Ip-адрес:" +channel.getLocalAddress().toString());
-				return;
+				logger.info("Подключился :"+((InetSocketAddress)channel.getRemoteAddress()).getHostName());
+				channelGroup.add(channel);
 			}
 
-			channelGroup.add(channel);
 			if (!isStreaming) {
 				//do some thing
 				Runnable imageGrabTask = new ImageGrabTask();
@@ -121,6 +120,7 @@ public class StreamServerAgent implements IStreamServerAgent{
 
 
 		public void onClientDisconnected(Channel channel) {
+			logger.info("Подключился :"+channel.getRemoteAddress());
 			channelGroup.remove(channel);
 			int size = channelGroup.size();
 			if (size == 1) {

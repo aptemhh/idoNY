@@ -19,6 +19,8 @@ public class Autorisation extends JFrame {
     private JButton подключитьсяButton;
     private JPasswordField passwordField1;
     private JLabel Status;
+    private JButton создатьТрансляциюButton;
+    private JButton подключитьсяКТрансляцииButton;
 
     public Autorisation() throws HeadlessException {
         super();
@@ -29,13 +31,12 @@ public class Autorisation extends JFrame {
 
                 try {
                     ConnectorServer connectorServer = ConnectorServer.getInstate();
-                    connectorServer.connect();
                     Boolean aBoolean = ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
                             BisnessLogic(connectorServer, textField1.getText(), new String(passwordField1.getPassword()));
                     if(aBoolean)
                     {
-                        FormManager.hideAll();
-                        FormManager.show(form.class);
+                        Status.setText("Успешно");
+                        Status.setForeground(Color.GREEN);
                     }
                     else
                     {

@@ -24,6 +24,7 @@ public class FormManager {
         JFrame jFrame=classJFrameMap.get(aClass);
         jFrameVisible.add(jFrame);
         jFrame.setVisible(true);
+        jFrame.pack();
     }
     public static void hideAll()
     {

@@ -1,9 +1,12 @@
 package us.sosia.video.stream.agent;
 
 import com.github.sarxos.webcam.Webcam;
+import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.sosia.video.stream.forms.CreateTranslator;
 import us.sosia.video.stream.handler.StreamFrameListener;
+import us.sosia.video.stream.server.Person;
 
 import java.awt.*;
 import java.io.DataOutputStream;
@@ -21,6 +24,8 @@ public abstract class InterfaceProgramm {
     private static Dimension dimension = new Dimension(320,240);
     private StreamClientAgent streamClient;
     private StreamServerAgent serverAgent;
+    private StreamServerAssept serverAssept;
+
     private String keyT="qwe";
     private List<String> asseptAddressList=new ArrayList<String>();
     protected final static Logger logger = LoggerFactory.getLogger(InterfaceProgramm.class);
@@ -38,7 +43,16 @@ public abstract class InterfaceProgramm {
         serverAgent.start(inetSocketAddress);
         logger.error("Стартовала трансляция");
     }
-
+    public void stopServerTranslator()
+    {
+        serverAgent.stop();
+        logger.error("Трансляция оставновлена");
+    }
+    public void stopClientTranslator()
+    {
+        streamClient.stop();
+        logger.error("Отключен от транслятора");
+    }
 
 
     public static Dimension getDimension() {
@@ -66,7 +80,7 @@ public abstract class InterfaceProgramm {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Socket socket=new Socket(inetAddress,port);
+                    Socket socket=new Socket(inetAddress ,port);
                     new DataOutputStream(socket.getOutputStream()).writeUTF(key);
                     socket.close();
                 } catch (IOException e) {
@@ -74,7 +88,14 @@ public abstract class InterfaceProgramm {
                 }
             }
         }).start();
-
-
+    }
+    public void createServerAssept(OneToOneDecoder oneToOneDecoder)
+    {
+        serverAssept=StreamServerAssept.getStreamServerAssept(oneToOneDecoder);
+        serverAssept.start(new InetSocketAddress(Person.ip,Person.portP));
+    }
+    public void stopServerAssept()
+    {
+        serverAssept.stop();
     }
 }

@@ -16,13 +16,18 @@ import java.net.SocketException;
  * Created by idony on 03.11.16.
  */
 public class InterfaceImp extends InterfaceProgramm {
+    private final static InterfaceImp INTERFACE_IMP=new InterfaceImp();
     private final static Dimension dimension = new Dimension(320, 240);
     protected  VideoPanel videoPannel;
 
 
-    public InterfaceImp() {
+    private InterfaceImp() {
         super();
 
+    }
+    public static InterfaceImp getInterfaceImp()
+    {
+        return INTERFACE_IMP;
     }
 
     public void init() {

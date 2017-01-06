@@ -14,6 +14,8 @@ public class Person {
     public static Integer portS= 20001;
     public static Integer portP= 15044;
     public static String ip;
+    public static String keyS="123";
+    public static String keyP="123";
     {
         try {
             ip = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName();

@@ -27,45 +27,47 @@ import java.util.concurrent.Executors;
 public class StreamServerAssept implements IStreamServerAgent {
     protected final static Logger logger = LoggerFactory.getLogger(StreamServerAssept.class);
     protected final ServerBootstrap serverBootstrap;
+    private static StreamServerAssept streamServerAssept;
     protected final ChannelGroup channelGroup = new DefaultChannelGroup();
-    public StreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
-        super();
 
-        this.serverBootstrap = new ServerBootstrap();
-        this.serverBootstrap.setFactory(new NioServerSocketChannelFactory(
+    public static StreamServerAssept getStreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
+        if(streamServerAssept==null)
+            streamServerAssept=new StreamServerAssept(oneToOneDecoder);
+        return streamServerAssept;
+    }
+    public static StreamServerAssept getStreamServerAssept() {
+        return streamServerAssept;
+    }
+
+
+    private StreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
+        super();
+        serverBootstrap = new ServerBootstrap();
+        serverBootstrap.setFactory(new NioServerSocketChannelFactory(
                 Executors.newCachedThreadPool(),
                 Executors.newCachedThreadPool()));
-        this.serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+        serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
             public ChannelPipeline getPipeline() throws Exception {
                 ChannelPipeline pipeline = Channels.pipeline();
-                pipeline.addLast("Пришел клиент", new StreamServerHandler(new StreamServerListener() {
-                    public void onClientConnectedIn(Channel channel) {
-                        channelGroup.add(channel);
-                    }
-
-                    public void onClientDisconnected(Channel channel) {
-                        channelGroup.remove(channel);
-                    }
-
-                    public void onExcaption(Channel channel, Throwable t) {
-                        channelGroup.remove(channel);
-                        channel.close();
-                    }
-                }));
-                pipeline.addLast("frame encoder", new LengthFieldPrepender(4,false));
-                pipeline.addLast("reader",oneToOneDecoder);
+                pipeline.addLast("frame encoder", new LengthFieldPrepender(4, false));
+                pipeline.addLast("reader", oneToOneDecoder);
                 return pipeline;
             }
         });
     }
+
+    Channel channel = null;
+
     public void start(SocketAddress streamAddress) {
-        logger.info("Server started :{}",streamAddress);
-        Channel channel = serverBootstrap.bind(streamAddress);
+        logger.info("Server started :{}", streamAddress);
+        channel = serverBootstrap.bind(streamAddress);
         channelGroup.add(channel);
+
     }
 
     public void stop() {
         logger.info("server is stoping");
+
         channelGroup.close();
         serverBootstrap.releaseExternalResources();
     }
