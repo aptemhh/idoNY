@@ -98,9 +98,10 @@ public class ConnectorServer extends MessageListners {
         return connectorServer;
     }
 
-    public void connect(String ip, Integer port) throws Exception {
-        logger.info("going to connect to stream server :{}", ip + ":" + port);
-        clientBootstrap.remoteAddress(ip, port);
+    public void connect() throws Exception {
+        if(clientChannel!=null&&clientChannel.isOpen())return;
+        logger.info("going to connect to stream server :{}", Person.ip+ ":" +  Person.portS);
+        clientBootstrap.remoteAddress(Person.ip, Person.portS);
         try {
             clientChannel = clientBootstrap.connect().sync().channel();
         } catch (InterruptedException e) {
@@ -129,7 +130,7 @@ public class ConnectorServer extends MessageListners {
                 JAXB.marshal(stringWriter, mess, mess.getClass(), ((Message) mess).getData().getClass());
                 ChannelFuture future = null;
                 future = clientChannel.write(stringWriter.getBuffer().toString());
-                logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
+                //logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
                 return true;
             } catch (JAXBException e) {
                 e.printStackTrace();
@@ -144,7 +145,7 @@ public class ConnectorServer extends MessageListners {
         ConnectorServer connectorServer = ConnectorServer.getInstate();
 
         try {
-            connectorServer.connect(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20001);
+            connectorServer.connect();
         } catch (Exception e) {
         }
 

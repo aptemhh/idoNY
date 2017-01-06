@@ -1,5 +1,8 @@
 package us.sosia.video.stream.server;
 
+import java.net.NetworkInterface;
+import java.net.SocketException;
+
 /**
  * Created by idony on 06.01.17.
  */
@@ -7,7 +10,17 @@ public class Person {
     String login;
     String password;
     static Person person=new Person();
-
+    public static Integer portT= 20000;
+    public static Integer portS= 20001;
+    public static Integer portP= 15044;
+    public static String ip;
+    {
+        try {
+            ip = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+    }
     public String getLogin() {
         return person.login;
     }

@@ -2,10 +2,7 @@ package us.sosia.video.stream.server.listners;
 
 import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Person;
-import us.sosia.video.stream.server.models.ConnectTC;
-import us.sosia.video.stream.server.models.ConnectTS;
-import us.sosia.video.stream.server.models.Data;
-import us.sosia.video.stream.server.models.Message;
+import us.sosia.video.stream.server.models.*;
 
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
@@ -18,9 +15,9 @@ public class AutorisationListner extends MessageListner {
 
     public Message reader(Message message) {
         if (message == null || message.getUuid() == null || current == null) return null;
-        if (message.getData() != null && message.getData() instanceof Data) {
+        if (message.getData() != null && message.getType().equals(Data.class.getName())) {
             if (current.equals(message.getUuid())) {
-                this.message = message;
+                setMessage(message);
                 Notify();
             } else {
                 logger.error("UUID не совпадают!!!");
@@ -40,12 +37,22 @@ public class AutorisationListner extends MessageListner {
         mess.setData(createT);
         connectorServer.write(mess);
         Wait(-1l);
+        for(;getMessage()==null;){
+            try {
+                Thread.sleep(100l);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Message message=getMessage();
+        setMessage(null);
         Boolean aBoolean=message.getLogin()!=null;
         Person person=Person.getInstanse();
         if(aBoolean){
             person.setLogin(login);
             person.setPassword(pass);
         }
+
         return aBoolean;
     }
 }

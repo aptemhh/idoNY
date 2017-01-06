@@ -8,6 +8,7 @@ import us.sosia.video.stream.agent.InterfaceImp;
 import us.sosia.video.stream.agent.StreamServerAssept;
 import us.sosia.video.stream.agent.ui.VideoPanel;
 import us.sosia.video.stream.server.ConnectorServer;
+import us.sosia.video.stream.server.Person;
 import us.sosia.video.stream.server.listners.AutorisationListner;
 import us.sosia.video.stream.server.listners.ConnectTListner;
 import us.sosia.video.stream.server.listners.CreateTListner;
@@ -43,22 +44,15 @@ public class form extends JFrame{
                 super.mousePressed(e);
                 new Thread(new Runnable() {
                     public void run() {
-                        String ip=null;
-                        try {
-                            ip=NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName();
-                        } catch (SocketException e1) {
-                            e1.printStackTrace();
-                        }
+
                         Integer portT= 20000;
                         Integer portS= 20001;
                         Integer portP= 15044;
                         ConnectorServer connectorServer = ConnectorServer.getInstate();
                         try {
-                            connectorServer.connect(ip, portS);
-                            Boolean aBoolean = ((AutorisationListner)connectorServer.getListner(AutorisationListner.class)).
-                                    BisnessLogic(connectorServer, "user", "user");
+                            connectorServer.connect();
                             CreateTC createTC = ((CreateTListner)connectorServer.getListner(CreateTListner.class)).
-                                    BisnessLogic(connectorServer,ip,portT);
+                                    BisnessLogic(connectorServer,Person.ip,portT);
                             List<String> strings = ((SettingTListner)connectorServer.getListner(SettingTListner.class)).
                                     BisnessLogic(connectorServer);
                             strings.remove(0);
@@ -86,11 +80,11 @@ public class form extends JFrame{
                             }
                         }
 
-                        ).start(new InetSocketAddress(ip,portP));
+                        ).start(new InetSocketAddress(Person.ip,portP));
 
                         //endregion
 
-                        imp.startTranslutor(ip,portT);
+                        imp.startTranslutor(Person.ip,portT);
                     }
                 }).start();
             }
@@ -110,9 +104,7 @@ public class form extends JFrame{
                     Integer portS= 20001;
 
                     ConnectorServer connectorServer = ConnectorServer.getInstate();
-                    connectorServer.connect(ip.getCanonicalHostName(), portS);
-                    Boolean aBoolean = ((AutorisationListner)connectorServer.getListner(AutorisationListner.class)).
-                            BisnessLogic(connectorServer, "clop", "clop");
+                    connectorServer.connect();
                     ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).BisnessLogic(connectorServer,"user");
                     connectorServer.stop();
 

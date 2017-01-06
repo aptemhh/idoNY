@@ -14,11 +14,11 @@ public class SettingTListner extends MessageListner {
 
 
     public Message reader(Message message) {
-        Message mess;
         if (message == null || message.getUuid() == null || current == null) return null;
-        if (message.getData() != null && message.getData() instanceof SettingTC) {
+        if (message.getData() != null && message.getType().equals(SettingTC.class.getName())) {
             if (current.equals(message.getUuid())) {
-                this.message = message;
+                setMessage(message);
+
                 Notify();
             } else {
                 logger.error("UUID не совпадают!!!");
@@ -36,7 +36,19 @@ public class SettingTListner extends MessageListner {
         SettingTS createT = new SettingTS();
         mess.setData(createT);
         connectorServer.write(mess);
+
+        setMessage(null);
+
         Wait(-1l);
+        for(;getMessage()==null;){
+            try {
+                Thread.sleep(100l);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Message message=getMessage();
+        setMessage(null);
         return ((SettingTC)message.getData()).getLogins();
     }
     public void sendSetting(ConnectorServer connectorServer,List<String> logins,Long idTranslator)
