@@ -7,12 +7,20 @@ import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import us.sosia.video.stream.agent.InterfaceImp;
 import us.sosia.video.stream.agent.StreamServerAssept;
 import us.sosia.video.stream.agent.ui.VideoPanel;
+import us.sosia.video.stream.server.ConnectorServer;
+import us.sosia.video.stream.server.listners.AutorisationListner;
+import us.sosia.video.stream.server.listners.ConnectTListner;
+import us.sosia.video.stream.server.listners.CreateTListner;
+import us.sosia.video.stream.server.listners.SettingTListner;
+import us.sosia.video.stream.server.models.ConnectTC;
+import us.sosia.video.stream.server.models.CreateTC;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.*;
+import java.util.List;
 
 /**
  * Created by idony on 24.12.16.
@@ -33,31 +41,58 @@ public class form extends JFrame{
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                //region сервер предодобрения
-                try {
-                    new StreamServerAssept(new OneToOneDecoder() {
-                        @Override
-                        protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-                            byte[] bytes=((BigEndianHeapChannelBuffer) msg).array();
-                            String keyClient = new String(bytes,2,bytes.length-2);
-                            if(keyServ.equals(keyClient))
-                        {
-                            System.out.println("Ключ совпал");
-                            imp.addAsseptAddress (((InetSocketAddress)channel.getRemoteAddress()).getHostName());
+                new Thread(new Runnable() {
+                    public void run() {
+                        String ip=null;
+                        try {
+                            ip=NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName();
+                        } catch (SocketException e1) {
+                            e1.printStackTrace();
                         }
-                        else
-                            System.out.println("Ключ не совпал");
-                            return msg;
+                        Integer portT= 20000;
+                        Integer portS= 20001;
+                        Integer portP= 15044;
+                        ConnectorServer connectorServer = ConnectorServer.getInstate();
+                        try {
+                            connectorServer.connect(ip, portS);
+                            Boolean aBoolean = ((AutorisationListner)connectorServer.getListner(AutorisationListner.class)).
+                                    BisnessLogic(connectorServer, "user", "user");
+                            CreateTC createTC = ((CreateTListner)connectorServer.getListner(CreateTListner.class)).
+                                    BisnessLogic(connectorServer,ip,portT);
+                            List<String> strings = ((SettingTListner)connectorServer.getListner(SettingTListner.class)).
+                                    BisnessLogic(connectorServer);
+                            strings.remove(0);
+                            ((SettingTListner)connectorServer.getListner(SettingTListner.class)).
+                                    sendSetting(connectorServer, strings, createTC.getIdTranslator());
+                            keyServ=createTC.getKey();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
                         }
+
+                        //region сервер предодобрения
+                        new StreamServerAssept(new OneToOneDecoder() {
+                            @Override
+                            protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
+                                byte[] bytes=((BigEndianHeapChannelBuffer) msg).array();
+                                String keyClient = new String(bytes,2,bytes.length-2);
+                                if(keyServ.equals(keyClient))
+                                {
+                                    System.out.println("Ключ совпал");
+                                    imp.addAsseptAddress (((InetSocketAddress)channel.getRemoteAddress()).getHostName());
+                                }
+                                else
+                                    System.out.println("Ключ не совпал");
+                                return msg;
+                            }
+                        }
+
+                        ).start(new InetSocketAddress(ip,portP));
+
+                        //endregion
+
+                        imp.startTranslutor(ip,portT);
                     }
-
-                    ).start(new InetSocketAddress(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(),15044));
-                } catch (SocketException e1) {
-                    e1.printStackTrace();
-                }
-                //endregion
-
-                imp.startTranslutor();
+                }).start();
             }
         });
         button6456tyutyutyutuButton.addMouseListener(new MouseAdapter() {
@@ -65,10 +100,28 @@ public class form extends JFrame{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 try {
-                    imp.connectServerAdressAccept(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement(),keyClient);
-                    imp.openTranslutor(videoPanel, NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20000);
+                    InetAddress ip=null;
+                    try {
+                        ip=NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement();
+                    } catch (SocketException e1) {
+                        e1.printStackTrace();
+                    }
+                    Integer portP= 15044;
+                    Integer portS= 20001;
+
+                    ConnectorServer connectorServer = ConnectorServer.getInstate();
+                    connectorServer.connect(ip.getCanonicalHostName(), portS);
+                    Boolean aBoolean = ((AutorisationListner)connectorServer.getListner(AutorisationListner.class)).
+                            BisnessLogic(connectorServer, "clop", "clop");
+                    ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).BisnessLogic(connectorServer,"user");
+                    connectorServer.stop();
+
+                    imp.connectServerAdressAccept(ip,portP,connectTC.getKey());
+                    imp.openTranslutor(videoPanel, connectTC.getIp(), connectTC.getPort());
 
                 } catch (SocketException e1) {
+                    e1.printStackTrace();
+                } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }

@@ -30,4 +30,13 @@ public class ConnectTC extends Data {
     public String getKey() {
         return key;
     }
+
+    @Override
+    public String toString() {
+        return "ConnectTC{" +
+                "ip='" + ip + '\'' +
+                ", port=" + port +
+                ", key='" + key + '\'' +
+                '}';
+    }
 }

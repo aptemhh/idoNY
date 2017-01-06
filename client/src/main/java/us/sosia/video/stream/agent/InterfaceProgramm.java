@@ -61,12 +61,12 @@ public abstract class InterfaceProgramm {
         });
     }
 
-    public void connectServerAdressAccept(final InetAddress inetAddress,final String key)
+    public void connectServerAdressAccept(final InetAddress inetAddress, final Integer port, final String key)
     {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Socket socket=new Socket(inetAddress,15044);
+                    Socket socket=new Socket(inetAddress,port);
                     new DataOutputStream(socket.getOutputStream()).writeUTF(key);
                     socket.close();
                 } catch (IOException e) {

@@ -41,18 +41,14 @@ public class InterfaceImp extends InterfaceProgramm {
 
     }
 
-    public void startTranslutor() {
-        try {
+    public void startTranslutor(String ip,Integer port) {
+
             Webcam.setAutoOpenMode(true);
             Webcam webcam = Webcam.getDefault();
             Dimension dimension = new Dimension(320, 240);
             webcam.setViewSize(dimension);
             if (webcam == null)
                 System.out.println("err");
-
-            createTranslator(new InetSocketAddress(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20000), webcam);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+            createTranslator(new InetSocketAddress(ip, port), webcam);
     }
 }

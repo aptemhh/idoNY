@@ -9,16 +9,18 @@ import us.sosia.video.stream.server.models.Message;
 import javax.xml.bind.JAXBException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by idony on 04.01.17.
  */
 public class MessageListners {
-    ArrayList<MessageListner> listnerArray = new ArrayList<MessageListner>();
+    Map<Class,MessageListner> listnerArray = new HashMap<Class, MessageListner>();
     protected final static Logger logger = LoggerFactory.getLogger(MessageListners.class);
 
-    public void addListner(MessageListner listner) {
-        listnerArray.add(listner);
+    public void addListner(Class name,MessageListner listner) {
+        listnerArray.put(name,listner);
     }
 
     public void deleteListner(MessageListner listner) {
@@ -27,7 +29,7 @@ public class MessageListners {
 
     public void submitLisners(Message message, ChannelHandlerContext channelHandlerContext) {
         Message message1;
-        for (MessageListner messageListner : listnerArray) {
+        for (MessageListner messageListner : listnerArray.values()) {
             message1 = messageListner.reader(message);
             if (message1 != null) {
                 StringWriter stringWriter = new StringWriter();
@@ -41,5 +43,9 @@ public class MessageListners {
 
             }
         }
+    }
+    public MessageListner getListner(Class name)
+    {
+        return listnerArray.get(name);
     }
 }

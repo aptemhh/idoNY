@@ -27,19 +27,17 @@ public class CreateTListner extends MessageListner {
         return null;
     }
 
-    public void BisnessLogic(ConnectorServer connectorServer) throws TimeoutException {
+    public CreateTC BisnessLogic(ConnectorServer connectorServer,String ip,Integer port) throws TimeoutException {
 
         Message mess = new Message();
         mess.setType(CreateTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         CreateTS createT = new CreateTS();
-        createT.setIp("123");
-        createT.setPort(123);
-        mess.setLogin("admin");
-        mess.setPass("admin");
+        createT.setIp(ip);
+        createT.setPort(port);
         mess.setData(createT);
         connectorServer.write(mess);
         Wait(-1l);
-        System.out.println("DOOOOOOOOOOOOOOOOOOOOOD");
+        return ((CreateTC)message.getData());
     }
 }

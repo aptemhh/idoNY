@@ -6,6 +6,7 @@ import org.idony.JAXB;
 import org.idony.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.sosia.video.stream.server.models.Data;
 import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBException;
@@ -28,7 +29,7 @@ public class MessageListners {
     }
     public void submitLisners(Message message,ChannelHandlerContext channelHandlerContext)
     {
-        if(!HibernateUtil.security(message.getLogin(), message.getPass()))
+        if(!HibernateUtil.security(message.getLogin(), message.getPass())&&!(message.getType().equals(Data.class.getName())))
             return;
         Message message1;
         for(MessageListner messageListner:listnerArray)

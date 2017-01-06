@@ -68,10 +68,12 @@ public class HibernateUtil {
     {
         SessionFactory sessionFactory = getSessionFactory();
         Session session=sessionFactory.openSession();
+        if(login==null ||pass==null)return false;
         Boolean connectors =
                 session.createCriteria(Login.class).add(Restrictions.eq("login", login)).
                         add(Restrictions.eq("password", pass))
                         .list().size() != 0;
+
         return connectors;
     }
 

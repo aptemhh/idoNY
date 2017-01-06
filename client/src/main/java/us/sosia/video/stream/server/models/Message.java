@@ -2,6 +2,7 @@ package us.sosia.video.stream.server.models;
 
 import com.sun.xml.txw2.annotation.XmlAttribute;
 import com.sun.xml.txw2.annotation.XmlElement;
+import us.sosia.video.stream.server.Person;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.UUID;
@@ -56,5 +57,10 @@ public class Message {
     @XmlElement
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public Message() {
+        login=Person.getInstanse().getLogin();
+        pass=Person.getInstanse().getPassword();
     }
 }

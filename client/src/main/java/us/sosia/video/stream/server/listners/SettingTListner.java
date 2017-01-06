@@ -34,13 +34,21 @@ public class SettingTListner extends MessageListner {
         mess.setType(SettingTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         SettingTS createT = new SettingTS();
-        mess.setLogin("admin");
-        mess.setPass("admin");
         mess.setData(createT);
         connectorServer.write(mess);
         Wait(-1l);
-        System.out.println("DOOOOOOOOOOOOOOOOOOOOOD");
         return ((SettingTC)message.getData()).getLogins();
+    }
+    public void sendSetting(ConnectorServer connectorServer,List<String> logins,Long idTranslator)
+    {
+        Message message=new Message();
+        message.setUuid(UUID.randomUUID());
+        message.setType(SettingTSO.class.getName());
+        SettingTSO settingTSO=new SettingTSO();
+        settingTSO.setLogins(logins);
+        settingTSO.setIdTranslator(idTranslator);
+        message.setData(settingTSO);
+        connectorServer.write(message);
     }
 }
 

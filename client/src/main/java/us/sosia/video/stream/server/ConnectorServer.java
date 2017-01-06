@@ -22,17 +22,13 @@ import io.netty.handler.codec.string.StringEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.sosia.video.stream.agent.StreamClientAgent;
-import us.sosia.video.stream.server.listners.ConnectTListner;
-import us.sosia.video.stream.server.listners.CreateTListner;
-import us.sosia.video.stream.server.listners.MessageListners;
-import us.sosia.video.stream.server.listners.SettingTListner;
-import us.sosia.video.stream.server.models.Message;
-import us.sosia.video.stream.server.models.SettingTC;
-import us.sosia.video.stream.server.models.SettingTSO;
+import us.sosia.video.stream.server.listners.*;
+import us.sosia.video.stream.server.models.*;
 
 import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
@@ -41,12 +37,13 @@ import java.util.concurrent.TimeoutException;
  * Created by idony on 02.01.17.
  */
 public class ConnectorServer extends MessageListners {
+    protected static ConnectorServer connectorServer=new ConnectorServer();
     protected final static Logger logger = LoggerFactory.getLogger(StreamClientAgent.class);
     protected final Bootstrap clientBootstrap;
     protected Channel clientChannel;
     EventLoopGroup bossGroup;
 
-    public ConnectorServer() {
+    private ConnectorServer() {
         super();
         this.clientBootstrap = new Bootstrap();
 
@@ -58,24 +55,25 @@ public class ConnectorServer extends MessageListners {
                         ChannelPipeline pipeline = socketChannel.pipeline();
 
 
-                        pipeline.addLast( "framer2", new StringEncoder());
+                        pipeline.addLast("framer2", new StringEncoder());
 
-                        pipeline.addLast( "framer5", new ByteToMessageDecoder()
-                        {
+                        pipeline.addLast("framer5", new ByteToMessageDecoder() {
 
                             public Object decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
                                 String keyClient = new String(byteBuf.array());
                                 byteBuf.clear();
-                                keyClient=keyClient.substring(0,keyClient.indexOf(0));
-                                if(keyClient.length()==0)return null;
-                                logger.info("Пришло сообщение :\n---------{}------------",keyClient);
+                                byteBuf.writeZero(byteBuf.capacity());
+                                byteBuf.clear();
+                                keyClient = keyClient.substring(0, keyClient.indexOf(0));
+                                if (keyClient.length() <5) return null;
+                                logger.info("Пришло сообщение :\n---------{}------------", keyClient);
 
                                 Message message = null;
                                 Message message2;
                                 try {
                                     message = (Message) JAXB.unmarshal(new StringReader(keyClient), Message.class);
                                     message2 = (Message) JAXB.unmarshal(new StringReader(keyClient), Message.class, Class.forName(message.getType()));
-                                    submitLisners(message2,channelHandlerContext);
+                                    submitLisners(message2, channelHandlerContext);
                                 } catch (JAXBException e) {
                                     e.printStackTrace();
                                 } catch (ClassNotFoundException e) {
@@ -89,22 +87,26 @@ public class ConnectorServer extends MessageListners {
                         });
                     }
                 });
-
+        addListner(ConnectTListner.class,new ConnectTListner());
+        addListner(CreateTListner.class,new CreateTListner());
+        addListner(SettingTListner.class,new SettingTListner());
+        addListner(AutorisationListner.class,new AutorisationListner());
 
     }
+    public static ConnectorServer getInstate()
+    {
+        return connectorServer;
+    }
 
-
-    public void connect(String ip,Integer port) throws Exception {
-        logger.info("going to connect to stream server :{}", ip+":"+port);
-        clientBootstrap.remoteAddress(ip,port);
+    public void connect(String ip, Integer port) throws Exception {
+        logger.info("going to connect to stream server :{}", ip + ":" + port);
+        clientBootstrap.remoteAddress(ip, port);
         try {
-            clientChannel= clientBootstrap.connect().sync().channel();
+            clientChannel = clientBootstrap.connect().sync().channel();
         } catch (InterruptedException e) {
             logger.info(e.getMessage());
-        }
-        catch (Exception e)
-        {
-            throw  e;
+        } catch (Exception e) {
+            throw e;
         }
 
 
@@ -114,7 +116,7 @@ public class ConnectorServer extends MessageListners {
     public void stop() {
 
         clientChannel.close().awaitUninterruptibly();
-            bossGroup.shutdown();
+        bossGroup.shutdown();
 
     }
 
@@ -124,8 +126,8 @@ public class ConnectorServer extends MessageListners {
 
             try {
                 StringWriter stringWriter = new StringWriter();
-                JAXB.marshal(stringWriter, mess, mess.getClass(),((Message)mess).getData().getClass());
-                ChannelFuture future=null;
+                JAXB.marshal(stringWriter, mess, mess.getClass(), ((Message) mess).getData().getClass());
+                ChannelFuture future = null;
                 future = clientChannel.write(stringWriter.getBuffer().toString());
                 logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
                 return true;
@@ -137,44 +139,30 @@ public class ConnectorServer extends MessageListners {
     }
 
 
-    public static void main(String[] bud)  {
+    public static void main(String[] bud) {
 
-        ConnectorServer connectorServer = new ConnectorServer();
+        ConnectorServer connectorServer = ConnectorServer.getInstate();
 
         try {
             connectorServer.connect(NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(), 20001);
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
 
-        ConnectTListner connectTListner=new ConnectTListner();
-        CreateTListner createTListner =new CreateTListner();
-        SettingTListner settingTListner =new SettingTListner();
-        connectorServer.addListner(connectTListner);
-        connectorServer.addListner(createTListner);
-        connectorServer.addListner(settingTListner);
+
         try {
-            Thread.sleep(1000);
-            //connectTListner.BisnessLogic(connectorServer);
+            Boolean aBoolean = ((AutorisationListner)connectorServer.getListner(AutorisationListner.class)).
+                    BisnessLogic(connectorServer, "user", "user");
+            ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).BisnessLogic(connectorServer,"user");
+            System.out.println(connectTC);
 
-            List<String> strings = settingTListner.BisnessLogic(connectorServer);
-            strings.remove(0);
-            Message message=new Message();
-            message.setUuid(UUID.randomUUID());
-            message.setType(SettingTSO.class.getName());
-            message.setLogin("user");
-            SettingTSO settingTSO=new SettingTSO();
-            settingTSO.setLogins(strings);
-            settingTSO.setIdTranslator(1l);
-            message.setData(settingTSO);
-            message.setPass("user");
-            connectorServer.write(message);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//            CreateTC createTC = createTListner.BisnessLogic(connectorServer,NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName(),15044);
+//
+//            List<String> strings = settingTListner.BisnessLogic(connectorServer);
+//            strings.remove(0);
+//            settingTListner.sendSetting(connectorServer, strings, createTC.getIdTranslator());
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
         connectorServer.stop();
-
     }
 }
