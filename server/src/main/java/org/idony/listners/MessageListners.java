@@ -41,7 +41,7 @@ public class MessageListners {
                 try {
                     JAXB.marshal(stringWriter, message1, Message.class, message1.getData().getClass());
                     channelHandlerContext.write(stringWriter.getBuffer().toString());
-                    logger.info("Отправил ответ:\n-----{}-------", stringWriter.getBuffer().toString());
+                    logger.info("Отправил ответ:\n", stringWriter.getBuffer().toString());
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }

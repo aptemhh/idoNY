@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:hsqldb:file:/home/idony/Загрузки/idoNY/server/db/db</property>
+    <property name="connection.url">jdbc:hsqldb:file:D:/idoNY/server/db/db</property>
     <property name="hibernate.connection.username">user</property>
     <property name="hibernate.connection.password">user</property>
     <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>

@@ -51,6 +51,31 @@ public class ClientTranslator extends JFrame{
                 }
             }
         });
+        отключитьсяButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                InterfaceImp.getInterfaceImp().stopClientTranslator();
+            }
+        });
+        отклВидеоButton.addMouseListener(new MouseAdapter() {
+            String s="Вкл. видео",s2="Выкл. видео";
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(videoPanel.getVisable())
+                {
+                    videoPanel.setVisable(false);
+                    отклВидеоButton.setText(s);
+                }
+                else {
+                    videoPanel.setVisable(true);
+                    отклВидеоButton.setText(s2);
+                }
+
+            }
+        });
     }
 
     public static void main(String[] bud) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {

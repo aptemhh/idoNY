@@ -13,7 +13,8 @@ import javax.swing.*;
  */
 public class main {
     public static void main(String[] bud) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+
         ConnectorServer connectorServer = ConnectorServer.getInstate();
         try {
             connectorServer.connect();
@@ -23,7 +24,7 @@ public class main {
         FormManager.add(Autorisation.class);
         FormManager.add(ClientTranslator.class);
         FormManager.add(CreateTranslator.class);
-        FormManager.show(CreateTranslator.class);
+        FormManager.show(ClientTranslator.class);
 
 
     }

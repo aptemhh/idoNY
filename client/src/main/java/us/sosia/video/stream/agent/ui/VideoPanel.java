@@ -25,7 +25,7 @@ public class VideoPanel extends JPanel {
 	protected BufferedImage image;
 	protected final ExecutorService worker = Executors.newSingleThreadExecutor();
 	protected final ScaledThumbnailMaker scaleUPMaker = new ScaledThumbnailMaker(2);
-
+	protected volatile Boolean visable=true;
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		if (image == null) {
@@ -82,17 +82,33 @@ public class VideoPanel extends JPanel {
 	}
 
 	public void updateImage(final BufferedImage update) {
-		worker.execute(new Runnable() {
-			public void run() {
-				// image = scaleUPMaker.make(update);
-				image = update;
-				repaint();
-			}
-		});
+		synchronized (visable) {
+			if (visable)
+				worker.execute(new Runnable() {
+					public void run() {
+						// image = scaleUPMaker.make(update);
+						image = update;
+						repaint();
+					}
+				});
+		}
 	}
 
 	public void close() {
 		worker.shutdown();
 	}
-
+	public void setVisable(Boolean visable)
+	{
+		synchronized (visable)
+		{
+			this.visable=visable;
+		}
+	}
+	public Boolean getVisable()
+	{
+		synchronized (visable)
+		{
+			return  visable;
+		}
+	}
 }
