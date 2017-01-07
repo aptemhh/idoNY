@@ -85,7 +85,7 @@ public class HibernateUtil {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.createQuery("truncate table " + table).executeUpdate();
+            session.createSQLQuery("truncate table " + table).executeUpdate();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) tx.rollback();

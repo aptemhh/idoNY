@@ -95,11 +95,11 @@ public class StreamServerAgent implements IStreamServerAgent{
 
 
 		public void onClientConnectedIn(final Channel channel) {
-//			if (socketAddresses.stream().anyMatch(new Predicate<String>() {
-//				public boolean test(String inetSocketAddress) {
-//					return inetSocketAddress.equals(((InetSocketAddress)channel.getRemoteAddress()).getHostName());
-//				}
-//			}))
+			if (socketAddresses.stream().anyMatch(new Predicate<String>() {
+				public boolean test(String inetSocketAddress) {
+					return inetSocketAddress.equals(((InetSocketAddress)channel.getRemoteAddress()).getHostName());
+				}
+			}))
 			{
 				logger.info("Подключился :"+((InetSocketAddress)channel.getRemoteAddress()).getHostName());
 				channelGroup.add(channel);
@@ -120,7 +120,7 @@ public class StreamServerAgent implements IStreamServerAgent{
 
 
 		public void onClientDisconnected(Channel channel) {
-			logger.info("Подключился :"+channel.getRemoteAddress());
+			logger.info("Отключился :"+channel.getRemoteAddress());
 			channelGroup.remove(channel);
 			int size = channelGroup.size();
 			if (size == 1) {
@@ -145,17 +145,11 @@ public class StreamServerAgent implements IStreamServerAgent{
 		}
 		
 	}
-	int t=0;
-	protected volatile long frameCount = 0;
-		TargetDataLine microphone;
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		int CHUNK_SIZE=48;
-		byte[] audioBuf;
+
 
 		final int channelCount = 1;
 		IAudioSamples smp;
-		AudioFormat audioFormat = new AudioFormat(8000.0f, 16, channelCount, true, false);
-		protected long startTime;
+
 	private class ImageGrabTask implements Runnable{
 
 
@@ -168,47 +162,17 @@ public class StreamServerAgent implements IStreamServerAgent{
 			/**
 			 * using this when the h264 encoder is inside this class
 			 * */
-//			DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
-//			try {
-//				microphone = (TargetDataLine) AudioSystem.getLine(info);
-//				microphone.open(audioFormat);
-//				microphone.start();
-//			} catch (LineUnavailableException e) {
-//				e.printStackTrace();
-//			}
-//			audioBuf= new byte[microphone.getBufferSize() / 5];
-//			if (microphone.available() == 88200)
-//			{
-//				int nBytesRead = microphone.read(audioBuf, 0, CHUNK_SIZE);//audioBuf.length);//aline.available());
-//				if (nBytesRead>0) {
-//					IBuffer iBuf = IBuffer.make(null, audioBuf, 0, nBytesRead);
-//
-//					smp = IAudioSamples.make(iBuf, channelCount, IAudioSamples.Format.swigToEnum(1));
-//
-//					if (smp != null) {
-//						long numSample = nBytesRead / smp.getSampleSize();
-//						long now = System.currentTimeMillis();
-//						if (startTime == 0) {
-//							startTime = now;
-//						}
-//						smp.setComplete(true, numSample, (int) audioFormat.getSampleRate(), audioFormat.getChannels(), IAudioSamples.Format.FMT_S16, (now - startTime)* 1000);
-//						smp.put(audioBuf, 1, 0,nBytesRead);
-//					}
-//				}
-//			}
-//			microphone.close();
-			encodeWorker.execute(new EncodeTask(bufferedImage, smp));
+			encodeWorker.execute(new EncodeTask(bufferedImage));
 		}
 		
 	}
 	
 	private class EncodeTask implements Runnable{
 		private final BufferedImage image;
-		private final IAudioSamples audioSamples;
-		public EncodeTask(BufferedImage image, IAudioSamples audioSamples) {
+		public EncodeTask(BufferedImage image) {
 			super();
 			this.image = image;
-			this.audioSamples = audioSamples;
+
 		}
 
 
