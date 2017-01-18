@@ -39,7 +39,9 @@ public class StreamClientChannelPipelineFactory implements ChannelPipelineFactor
 		pipeline.addLast("frame decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4,0,4));
 		//add the video stream handler
 		//change the below falst --> ture ,if using the netty's frame codec
+		if(dimension!=null)
 		pipeline.addLast("stream handler", new H264StreamDecoder(streamFrameListener,dimension,false,false));
+else pipeline.addLast("stream handler", new Micr.server.H264StreamDecoder(streamFrameListener,false,false));
 
 		return pipeline;
 	}

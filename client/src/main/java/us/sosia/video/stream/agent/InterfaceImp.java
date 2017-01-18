@@ -1,6 +1,7 @@
 package us.sosia.video.stream.agent;
 
 import com.github.sarxos.webcam.Webcam;
+import com.xuggle.xuggler.IAudioSamples;
 import us.sosia.video.stream.agent.ui.VideoPanel;
 import us.sosia.video.stream.handler.StreamFrameListener;
 
@@ -41,6 +42,9 @@ public class InterfaceImp extends InterfaceProgramm {
             connectToTranslator(new StreamFrameListener() {
                 public void onFrameReceived(BufferedImage image) {
                     videoPannel.updateImage(image);
+                }
+
+                public void onAudioRecieved(IAudioSamples samples) {
                 }
             }, new InetSocketAddress(inetAddress,port));
 

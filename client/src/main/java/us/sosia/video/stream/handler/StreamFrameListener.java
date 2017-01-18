@@ -1,5 +1,7 @@
 package us.sosia.video.stream.handler;
 
+import com.xuggle.xuggler.IAudioSamples;
+
 import java.awt.image.BufferedImage;
 
 public interface StreamFrameListener {
@@ -8,4 +10,5 @@ public interface StreamFrameListener {
 	 * @param image The received and decoded image
 	 * */
 	public void onFrameReceived(BufferedImage image);
+	public void onAudioRecieved(IAudioSamples samples);
 }
