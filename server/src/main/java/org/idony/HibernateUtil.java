@@ -20,7 +20,6 @@ public class HibernateUtil {
             // load from different directory
             SessionFactory sessionFactory = new Configuration().configure("/resources/hibernate.cfg.xml")
                     .buildSessionFactory();
-
             return sessionFactory;
 
         } catch (Throwable ex) {

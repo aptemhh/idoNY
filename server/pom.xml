@@ -63,7 +63,7 @@
     </dependencies>
 
     <build>
-        <finalName>dateutils</finalName>
+        <finalName>server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -110,6 +110,7 @@
                             <classpathPrefix>lib</classpathPrefix>
                         </manifest>
                     </archive>
+                    <outputDirectory>target\server</outputDirectory>
                 </configuration>
             </plugin>
 
@@ -124,7 +125,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/server/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -136,8 +137,20 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <targetPath>src/main/resources</targetPath>
+                <targetPath>resources</targetPath>
             </resource>
+            <resource>
+                <targetPath>../server/resources/db</targetPath>
+                <directory>db</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>run.bat</include>
+                </includes>
+                <targetPath>../server</targetPath>
+            </resource>
+
         </resources>
     </build>
    </project>

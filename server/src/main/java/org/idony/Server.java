@@ -42,7 +42,7 @@ public class Server extends MessageListners{
     protected ServerBootstrap b;
     Integer i=0;
     public Server() throws SocketException {
-        HibernateUtil.trancate("connection");
+
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
