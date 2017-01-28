@@ -4,7 +4,6 @@ import com.github.sarxos.webcam.Webcam;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.sosia.video.stream.forms.CreateTranslator;
 import us.sosia.video.stream.handler.StreamFrameListener;
 import us.sosia.video.stream.server.Person;
 
@@ -25,32 +24,46 @@ public abstract class InterfaceProgramm {
     private StreamClientAgent streamClient;
     private StreamServerAgent serverAgent;
     private StreamServerAssept serverAssept;
+    private StreamServerSoung streamServerSoung;
+    private StreamClientSoung streamClientSoung;
 
     private String keyT="qwe";
     private List<String> asseptAddressList=new ArrayList<String>();
     protected final static Logger logger = LoggerFactory.getLogger(InterfaceProgramm.class);
 
-    public void connectToTranslator(StreamFrameListener listener, InetSocketAddress inetSocketAddress)
+    public void connectToTranslator(StreamFrameListener listener, String  ip)
     {
         streamClient = new StreamClientAgent(listener,dimension);
-        streamClient.connect(inetSocketAddress);
+        streamClientSoung=new StreamClientSoung();
+        streamClientSoung.connect(new InetSocketAddress(ip,Person.portA));
+        streamClient.connect(new InetSocketAddress(ip,Person.portT));
         logger.error("Подключаемся к транслятору");
     }
 
-    public void createTranslator(InetSocketAddress inetSocketAddress,Webcam webcam)
+    public void createTranslator(String ip,Webcam webcam)
     {
         serverAgent = new StreamServerAgent(webcam, dimension,asseptAddressList);
-        serverAgent.start(inetSocketAddress);
+        streamServerSoung=new StreamServerSoung(asseptAddressList);
+        streamServerSoung.start(new InetSocketAddress(ip,Person.portA));
+        streamServerSoung.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        serverAgent.start(new InetSocketAddress(ip,Person.portT));
         logger.error("Стартовала трансляция");
     }
     public void stopServerTranslator()
     {
         serverAgent.stop();
+        streamServerSoung.stopServer();
         logger.error("Трансляция оставновлена");
     }
     public void stopClientTranslator()
     {
         streamClient.stop();
+        streamClientSoung.stop();
         logger.error("Отключен от транслятора");
     }
 
@@ -98,4 +111,14 @@ public abstract class InterfaceProgramm {
     {
         serverAssept.stop();
     }
+    public void setAudio(Boolean audio)
+    {
+        streamClientSoung.setAudio(audio);
+    }
+    public Boolean getAudio()
+    {
+        return streamClientSoung.getAudio();
+    }
+
+
 }

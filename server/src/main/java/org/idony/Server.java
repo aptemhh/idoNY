@@ -4,18 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.group.*;
 import io.netty.bootstrap.*;
-import io.netty.channel.local.LocalChannel;
-
 
 import io.netty.channel.socket.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.channel.socket.oio.OioServerSocketChannel;
-import io.netty.channel.socket.oio.OioSocketChannel;
-import io.netty.handler.codec.*;
-import io.netty.handler.codec.bytes.ByteArrayDecoder;
 
-import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.*;
 import io.netty.handler.codec.string.StringEncoder;
 
 import io.netty.handler.logging.LogLevel;
@@ -46,9 +40,9 @@ import java.util.concurrent.Executors;
 public class Server extends MessageListners{
     protected final static Logger logger = LoggerFactory.getLogger(Server.class);
     protected ServerBootstrap b;
-Integer i=0;
+    Integer i=0;
     public Server() throws SocketException {
-
+        HibernateUtil.trancate("connection");
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 

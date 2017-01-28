@@ -41,8 +41,6 @@ public class StreamClientChannelPipelineFactory implements ChannelPipelineFactor
 		//change the below falst --> ture ,if using the netty's frame codec
 		if(dimension!=null)
 		pipeline.addLast("stream handler", new H264StreamDecoder(streamFrameListener,dimension,false,false));
-else pipeline.addLast("stream handler", new Micr.server.H264StreamDecoder(streamFrameListener,false,false));
-
 		return pipeline;
 	}
 

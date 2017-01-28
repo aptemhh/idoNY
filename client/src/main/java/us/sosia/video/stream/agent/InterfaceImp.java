@@ -35,7 +35,7 @@ public class InterfaceImp extends InterfaceProgramm {
 
     }
 
-    public void openTranslutor(VideoPanel videoPanel, String inetAddress, Integer port) {
+    public void openTranslutor(VideoPanel videoPanel, String ip, Integer port) {
 
             this.videoPannel = videoPanel;
             this.videoPannel.setPreferredSize(dimension);
@@ -46,7 +46,7 @@ public class InterfaceImp extends InterfaceProgramm {
 
                 public void onAudioRecieved(IAudioSamples samples) {
                 }
-            }, new InetSocketAddress(inetAddress,port));
+            }, ip);
 
     }
 
@@ -58,6 +58,6 @@ public class InterfaceImp extends InterfaceProgramm {
             webcam.setViewSize(dimension);
             if (webcam == null)
                 System.out.println("err");
-            createTranslator(new InetSocketAddress(ip, port), webcam);
+            createTranslator(ip, webcam);
     }
 }

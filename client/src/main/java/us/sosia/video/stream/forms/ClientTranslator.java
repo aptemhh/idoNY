@@ -37,8 +37,8 @@ public class ClientTranslator extends JFrame{
                 super.mousePressed(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
-                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
-                            BisnessLogic(connectorServer, "clop","clop");
+//                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
+//                            BisnessLogic(connectorServer, "clop","clop");
 
                     ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).BisnessLogic(connectorServer,"user");
                     Person.keyP=connectTC.getKey();
@@ -72,6 +72,24 @@ public class ClientTranslator extends JFrame{
                 else {
                     videoPanel.setVisable(true);
                     отклВидеоButton.setText(s2);
+                }
+
+            }
+        });
+        отклЗвукButton.addMouseListener(new MouseAdapter() {
+            String s="Вкл. звук",s2="Выкл. звук";
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(InterfaceImp.getInterfaceImp().getAudio())
+                {
+                    InterfaceImp.getInterfaceImp().setAudio(false);
+                    отклЗвукButton.setText(s);
+                }
+                else {
+                    InterfaceImp.getInterfaceImp().setAudio(true);
+                    отклЗвукButton.setText(s2);
                 }
 
             }

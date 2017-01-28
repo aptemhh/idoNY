@@ -24,7 +24,7 @@ public class main {
         FormManager.add(Autorisation.class);
         FormManager.add(ClientTranslator.class);
         FormManager.add(CreateTranslator.class);
-        FormManager.show(ClientTranslator.class);
+        FormManager.show(Autorisation.class);
 
 
     }

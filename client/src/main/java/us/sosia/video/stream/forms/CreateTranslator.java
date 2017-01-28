@@ -42,8 +42,8 @@ public class CreateTranslator  extends JFrame {
                 super.mouseClicked(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
-                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
-                            BisnessLogic(connectorServer, "user","user");
+//                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
+//                            BisnessLogic(connectorServer, "user","user");
                     CreateTC createTC = ((CreateTListner) connectorServer.getListner(CreateTListner.class)).
                             BisnessLogic(connectorServer, Person.ip, Person.portT);
                     List<String> strings = ((SettingTListner) connectorServer.getListner(SettingTListner.class)).

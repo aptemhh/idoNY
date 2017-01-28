@@ -145,11 +145,6 @@ public class StreamServerAgent implements IStreamServerAgent{
 		}
 		
 	}
-
-
-		final int channelCount = 1;
-		IAudioSamples smp;
-
 	private class ImageGrabTask implements Runnable{
 
 

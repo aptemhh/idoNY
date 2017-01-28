@@ -18,7 +18,7 @@ public class HibernateUtil {
     private static SessionFactory buildSessionFactory() {
         try {
             // load from different directory
-            SessionFactory sessionFactory = new Configuration().configure()
+            SessionFactory sessionFactory = new Configuration().configure("/resources/hibernate.cfg.xml")
                     .buildSessionFactory();
 
             return sessionFactory;

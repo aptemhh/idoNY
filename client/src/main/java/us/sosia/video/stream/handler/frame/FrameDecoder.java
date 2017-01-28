@@ -6,7 +6,6 @@ import org.jboss.netty.buffer.HeapChannelBufferFactory;
 
 
 public class FrameDecoder{
-	//protected final ChannelBuffer dataSink = ChannelBuffers.dynamicBuffer(65536);
 	protected ChannelBuffer dataSink = ChannelBuffers.dynamicBuffer(65536, new HeapChannelBufferFactory());
 	protected final int headLength;
 	

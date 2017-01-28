@@ -54,7 +54,7 @@ public class H264StreamEncoder extends OneToOneEncoder{
 	private void initialize(){
 		//setup
 	 	iStreamCoder.setNumPicturesInGroupOfPictures(25);
-	 	
+
 		iStreamCoder.setBitRate(200000);
 		iStreamCoder.setBitRateTolerance(10000);
 		iStreamCoder.setPixelType(Type.YUV420P);

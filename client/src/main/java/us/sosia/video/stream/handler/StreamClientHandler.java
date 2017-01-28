@@ -15,7 +15,6 @@ import us.sosia.video.stream.handler.frame.FrameDecoder;
 public class StreamClientHandler extends SimpleChannelHandler{
 	protected final StreamClientListener streamClientListener;
 	protected final static Logger logger = LoggerFactory.getLogger(StreamClientHandler.class);
-	protected final FrameDecoder frameDecoder = new FrameDecoder(4);
 	public StreamClientHandler(StreamClientListener streamClientListener) {
 		super();
 		this.streamClientListener = streamClientListener;

@@ -44,7 +44,7 @@ public class ConnectTListner implements MessageListner {
             mess.setData(connectTC);
             if(connectors.size()==0)return mess;
 
-            Translator translator=connectors.get(0).getIdTranslator();
+            Translator translator=connectors.get(connectors.size()-1).getIdTranslator();
 
 
             connectTC.setIp(translator.getIp());

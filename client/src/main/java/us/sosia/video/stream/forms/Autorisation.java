@@ -52,6 +52,20 @@ public class Autorisation extends JFrame {
             }
         });
         pack();
+        создатьТрансляциюButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                FormManager.show(CreateTranslator.class);
+            }
+        });
+        подключитьсяКТрансляцииButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                FormManager.show(ClientTranslator.class);
+            }
+        });
     }
 
 }
