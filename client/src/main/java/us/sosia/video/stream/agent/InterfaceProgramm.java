@@ -31,7 +31,12 @@ public abstract class InterfaceProgramm {
     private List<String> asseptAddressList=new ArrayList<String>();
     protected final static Logger logger = LoggerFactory.getLogger(InterfaceProgramm.class);
 
-    public void connectToTranslator(StreamFrameListener listener, String  ip)
+    /**
+     * Подключиться к видео-трансляции
+     * @param listener обработчик видео
+     * @param ip адрес сервера
+     */
+    public void connectToTranslator(StreamFrameListener listener, String ip)
     {
         streamClient = new StreamClientAgent(listener,dimension);
         streamClientSoung=new StreamClientSoung();
@@ -40,26 +45,33 @@ public abstract class InterfaceProgramm {
         logger.error("Подключаемся к транслятору");
     }
 
+    /**
+     * Создать видео-трансляцию
+     * @param ip адрес
+     * @param webcam камера,с которой будет вестись видео-поток
+     */
     public void createTranslator(String ip,Webcam webcam)
     {
         serverAgent = new StreamServerAgent(webcam, dimension,asseptAddressList);
         streamServerSoung=new StreamServerSoung(asseptAddressList);
         streamServerSoung.start(new InetSocketAddress(ip,Person.portA));
         streamServerSoung.start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         serverAgent.start(new InetSocketAddress(ip,Person.portT));
         logger.error("Стартовала трансляция");
     }
+
+    /**
+     * Остановить видео-сервер
+     */
     public void stopServerTranslator()
     {
         serverAgent.stop();
         streamServerSoung.stopServer();
         logger.error("Трансляция оставновлена");
     }
+    /**
+     * Остановить видео-клиент
+     */
     public void stopClientTranslator()
     {
         streamClient.stop();
@@ -67,14 +79,10 @@ public abstract class InterfaceProgramm {
         logger.error("Отключен от транслятора");
     }
 
-
-    public static Dimension getDimension() {
-        return dimension;
-    }
-
-    public static void setDimension(Dimension dimension) {
-        InterfaceProgramm.dimension = dimension;
-    }
+    /**
+     * Добавить одобренный адрес
+     * @param asseptAddress одобренный адрес
+     */
     public void addAsseptAddress(String asseptAddress)
     {
         asseptAddressList.add(asseptAddress);
@@ -88,6 +96,12 @@ public abstract class InterfaceProgramm {
         });
     }
 
+    /**
+     * отправка ключа одобренному серверу
+     * @param inetAddress адрес сервер-одобрения
+     * @param port порт
+     * @param key ключ
+     */
     public void connectServerAdressAccept(final InetAddress inetAddress, final Integer port, final String key)
     {
         new Thread(new Runnable() {
@@ -102,19 +116,38 @@ public abstract class InterfaceProgramm {
             }
         }).start();
     }
+
+    /**
+     * Включить сервер-одобрения
+     * @param oneToOneDecoder обработчик ключей
+     */
     public void createServerAssept(OneToOneDecoder oneToOneDecoder)
     {
         serverAssept=StreamServerAssept.getStreamServerAssept(oneToOneDecoder);
         serverAssept.start(new InetSocketAddress(Person.ip,Person.portP));
     }
+
+    /**
+     * остановить сервер-одобрения
+     */
     public void stopServerAssept()
     {
         serverAssept.stop();
     }
+
+    /**
+     * вкл\выкл звук
+     * @param audio вкл\выкл
+     */
     public void setAudio(Boolean audio)
     {
         streamClientSoung.setAudio(audio);
     }
+
+    /**
+     * Включен ли звук
+     * @return статус переключателя звука
+     */
     public Boolean getAudio()
     {
         return streamClientSoung.getAudio();

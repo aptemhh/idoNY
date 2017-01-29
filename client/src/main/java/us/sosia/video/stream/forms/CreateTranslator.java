@@ -86,7 +86,7 @@ public class CreateTranslator  extends JFrame {
                             return msg;
                         }
                     });
-                    InterfaceImp.getInterfaceImp().startTranslutor(Person.ip,Person.portT);
+                    InterfaceImp.getInterfaceImp().startTranslutor(Person.ip);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 } finally {

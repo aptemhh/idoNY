@@ -32,7 +32,10 @@ import com.github.sarxos.webcam.Webcam;
 
 import javax.sound.sampled.*;
 
-public class StreamServerAgent implements IStreamServerAgent{
+/**
+ * Сервер видео потока
+ */
+public class StreamServerAgent implements IStreamServerAgent {
 	protected final static Logger logger = LoggerFactory.getLogger(StreamServerAgent.class);
 	protected final Webcam webcam;
 	protected final Dimension dimension;
@@ -46,6 +49,14 @@ public class StreamServerAgent implements IStreamServerAgent{
 	protected int FPS = 25;
 	protected ScheduledFuture<?> imageGrabTaskFuture;
 	List<String> socketAddresses;
+
+	/**
+	 * Конструктор сервера
+	 *
+	 * @param webcam          вебкамера
+	 * @param dimension       размер видео
+	 * @param socketAddresses одобренные адреса
+	 */
 	public StreamServerAgent(Webcam webcam, Dimension dimension, List<String> socketAddresses) {
 		super();
 		this.webcam = webcam;
@@ -62,26 +73,22 @@ public class StreamServerAgent implements IStreamServerAgent{
 		this.encodeWorker = Executors.newSingleThreadExecutor();
 		this.h264StreamEncoder = new H264StreamEncoder(dimension, false);
 		this.socketAddresses = socketAddresses;
-	}	
-	
-	
-	
-	public int getFPS() {
-		return FPS;
 	}
 
-	public void setFPS(int fPS) {
-		FPS = fPS;
-	}
-
-
+	/**
+	 * Запуск сервера
+	 *
+	 * @param streamAddress ip port сервера
+	 */
 	public void start(SocketAddress streamAddress) {
-		logger.info("Server started :{}",streamAddress);
+		logger.info("Server started :{}", streamAddress);
 		Channel channel = serverBootstrap.bind(streamAddress);
 		channelGroup.add(channel);
 	}
-	
 
+	/**
+	 * Остановить сервер
+	 */
 	public void stop() {
 		logger.info("server is stoping");
 		channelGroup.close();
@@ -89,38 +96,39 @@ public class StreamServerAgent implements IStreamServerAgent{
 		encodeWorker.shutdown();
 		serverBootstrap.releaseExternalResources();
 	}
-	
-	
-	private class StreamServerListenerIMPL implements StreamServerListener{
 
+	/**
+	 * Обработчик клиент
+	 */
+	private class StreamServerListenerIMPL implements StreamServerListener {
 
+		/**
+		 * Клиент подключился
+		 * @param channel канал клиента
+		 */
 		public void onClientConnectedIn(final Channel channel) {
-			if (socketAddresses.stream().anyMatch(new Predicate<String>() {
-				public boolean test(String inetSocketAddress) {
-					return inetSocketAddress.equals(((InetSocketAddress)channel.getRemoteAddress()).getHostName());
-				}
-			}))
-			{
-				logger.info("Подключился :"+((InetSocketAddress)channel.getRemoteAddress()).getHostName());
+			if (socketAddresses.stream().anyMatch(inetSocketAddress ->
+					inetSocketAddress.equals(((InetSocketAddress) channel.getRemoteAddress()).getHostName()))) {
+				logger.info("Подключился :" + ((InetSocketAddress) channel.getRemoteAddress()).getHostName());
 				channelGroup.add(channel);
 			}
 
 			if (!isStreaming) {
-				//do some thing
 				Runnable imageGrabTask = new ImageGrabTask();
 				ScheduledFuture<?> imageGrabFuture =
-						timeWorker.scheduleWithFixedDelay(imageGrabTask,
-								0,
-								1000 / FPS,
-								TimeUnit.MILLISECONDS);
+						timeWorker.scheduleWithFixedDelay(imageGrabTask,0,
+								1000 / FPS,TimeUnit.MILLISECONDS);
 				imageGrabTaskFuture = imageGrabFuture;
 				isStreaming = true;
 			}
 		}
 
-
+		/**
+		 * Клиент отключился
+		 * @param channel канал клиента
+		 */
 		public void onClientDisconnected(Channel channel) {
-			logger.info("Отключился :"+channel.getRemoteAddress());
+			logger.info("Отключился :" + channel.getRemoteAddress());
 			channelGroup.remove(channel);
 			int size = channelGroup.size();
 			if (size == 1) {
@@ -131,7 +139,11 @@ public class StreamServerAgent implements IStreamServerAgent{
 			}
 		}
 
-
+		/**
+		 * Обработчик ошибки в канале
+		 * @param channel канал клиента
+		 * @param t ошибка
+		 */
 		public void onExcaption(Channel channel, Throwable t) {
 			channelGroup.remove(channel);
 			channel.close();
@@ -141,54 +153,52 @@ public class StreamServerAgent implements IStreamServerAgent{
 				imageGrabTaskFuture.cancel(false);
 				webcam.close();
 				isStreaming = false;
-			
-		}
-		
-	}
-	private class ImageGrabTask implements Runnable{
-
-
-		public void run() {
-			BufferedImage bufferedImage = webcam.getImage();
-			/**
-			 * using this when the h264 encoder is added to the pipeline
-			 * */
-			//channelGroup.write(bufferedImage);
-			/**
-			 * using this when the h264 encoder is inside this class
-			 * */
-			encodeWorker.execute(new EncodeTask(bufferedImage));
-		}
-		
-	}
-	
-	private class EncodeTask implements Runnable{
-		private final BufferedImage image;
-		public EncodeTask(BufferedImage image) {
-			super();
-			this.image = image;
-
-		}
-
-
-		public void run() {
-			try {
-				Object msg = h264StreamEncoder.encode(image);
-				if (msg != null) {
-					channelGroup.write(msg);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
-		
-	}
 
-	
-	}
-	
-	
-	
-	
+		/**
+		 * Обработчик получения изображения с камеры
+		 */
+		private class ImageGrabTask implements Runnable {
 
+			/**
+			 * получения изображения с камеры
+			 */
+			public void run() {
+				BufferedImage bufferedImage = webcam.getImage();
+				encodeWorker.execute(new EncodeTask(bufferedImage));
+			}
+		}
+
+		/**
+		 * Шифрование изображения и отправка клиентам
+		 */
+		private class EncodeTask implements Runnable {
+			private final BufferedImage image;
+
+			/**
+			 * Конструктор
+			 * @param image Буффер изображения
+			 */
+			public EncodeTask(BufferedImage image) {
+				super();
+				this.image = image;
+
+			}
+
+			/**
+			 * Упаковка и отправка
+			 */
+			public void run() {
+				try {
+					Object msg = h264StreamEncoder.encode(image);
+					if (msg != null) {
+						channelGroup.write(msg);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

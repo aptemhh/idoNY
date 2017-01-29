@@ -30,6 +30,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Created by idony on 25.12.16.
+ * Класс сервера для принятия ключей и создания ободренного списка ip адресов
  */
 public class StreamServerAssept implements IStreamServerAgent {
     protected final static Logger logger = LoggerFactory.getLogger(StreamServerAssept.class);
@@ -37,16 +38,29 @@ public class StreamServerAssept implements IStreamServerAgent {
     private static StreamServerAssept streamServerAssept;
     protected final ChannelGroup channelGroup = new DefaultChannelGroup();
 
+    /**
+     * Контруктор-одиночка
+     * @param oneToOneDecoder оброботчик
+     * @return одиночку
+     */
     public static StreamServerAssept getStreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
         if(streamServerAssept==null)
             streamServerAssept=new StreamServerAssept(oneToOneDecoder);
         return streamServerAssept;
     }
+
+    /**
+     * Геттер класса
+     * @return одиночку
+     */
     public static StreamServerAssept getStreamServerAssept() {
         return streamServerAssept;
     }
 
-
+    /**
+     * Конструктор
+     * @param oneToOneDecoder обработчик входных сообщений
+     */
     private StreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
         super();
         serverBootstrap = new ServerBootstrap();
@@ -65,6 +79,10 @@ public class StreamServerAssept implements IStreamServerAgent {
 
     Channel channel = null;
 
+    /**
+     * Запуск сервера
+     * @param streamAddress
+     */
     public void start(SocketAddress streamAddress) {
         logger.info("Server started :{}", streamAddress);
         channel = serverBootstrap.bind(streamAddress);
@@ -72,6 +90,9 @@ public class StreamServerAssept implements IStreamServerAgent {
 
     }
 
+    /**
+     * Остановить сервер
+     */
     public void stop() {
         logger.info("server is stoping");
 

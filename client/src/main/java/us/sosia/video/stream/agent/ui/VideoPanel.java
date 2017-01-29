@@ -14,18 +14,22 @@ import javax.swing.JPanel;
 
 import net.coobird.thumbnailator.makers.ScaledThumbnailMaker;
 
-
+/**
+ * Видео-панель
+ */
 public class VideoPanel extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7292145875292244144L;
 
 	protected BufferedImage image;
 	protected final ExecutorService worker = Executors.newSingleThreadExecutor();
 	protected final ScaledThumbnailMaker scaleUPMaker = new ScaledThumbnailMaker(2);
 	protected volatile Boolean visable=true;
+
+	/**
+	 * Прорисовка изображения
+	 * @param g
+	 */
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		if (image == null) {
@@ -63,40 +67,32 @@ public class VideoPanel extends JPanel {
 			g2.setColor(Color.WHITE);
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			g2.drawString(str, (getWidth() - w) / 2, cy - h);
-			// w = metrics.stringWidth(str);
-			// h = metrics.getHeight();
-			// g2.drawString(str, (getWidth() - w) / 2, cy - 2 * h);
-
 		} else {
-			// owner.getGraphics().drawImage(image, 0, 0, image.getWidth(),
-			// image.getHeight(), null);
-			// g2.clearRect(0, 0, image.getWidth(), image.getHeight());
 			int width = image.getWidth();
 			int height = image.getHeight();
 			g2.clearRect(0, 0, width, height);
 			g2.drawImage(image, 0, 0, width, height, null);
-			// setBounds(getBounds().x , getBounds().y, image.getWidth(),
-			// image.getHeight());
 			setSize(width, height);
 		}
 	}
 
+	/**
+	 * обновление изображения
+	 * @param update
+	 */
 	public void updateImage(final BufferedImage update) {
 		synchronized (visable) {
 			if (visable)
-				worker.execute(new Runnable() {
-					public void run() {
-						// image = scaleUPMaker.make(update);
-						image = update;
-						repaint();
-					}
-				});
+				worker.execute(() -> {
+                    image = update;
+                    repaint();
+                });
 		}
 	}
 
-	public void close() {
-		worker.shutdown();
-	}
+	/**
+	 * установка видимости прорисовки
+	 */
 	public void setVisable(Boolean visable)
 	{
 		synchronized (visable)
@@ -104,6 +100,11 @@ public class VideoPanel extends JPanel {
 			this.visable=visable;
 		}
 	}
+
+	/**
+	 * включена ли прорисовка видео
+	 * @return да\нет
+	 */
 	public Boolean getVisable()
 	{
 		synchronized (visable)

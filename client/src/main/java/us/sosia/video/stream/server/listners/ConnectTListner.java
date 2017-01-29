@@ -31,7 +31,7 @@ public class ConnectTListner extends MessageListner {
 
     public ConnectTC BisnessLogic(ConnectorServer connectorServer,String loginTranslator) throws TimeoutException {
 
-        Message mess = new Message();
+        Message mess = new Message(true);
         mess.setType(ConnectTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         ConnectTS createT = new ConnectTS();

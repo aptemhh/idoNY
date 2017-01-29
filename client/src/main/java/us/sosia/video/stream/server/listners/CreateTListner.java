@@ -30,7 +30,7 @@ public class CreateTListner extends MessageListner {
 
     public CreateTC BisnessLogic(ConnectorServer connectorServer,String ip,Integer port) throws TimeoutException {
 
-        Message mess = new Message();
+        Message mess = new Message(true);
         mess.setType(CreateTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         CreateTS createT = new CreateTS();

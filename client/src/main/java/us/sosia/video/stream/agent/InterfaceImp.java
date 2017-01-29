@@ -17,47 +17,39 @@ import java.net.SocketException;
  * Created by idony on 03.11.16.
  */
 public class InterfaceImp extends InterfaceProgramm {
-    private final static InterfaceImp INTERFACE_IMP=new InterfaceImp();
+    private final static InterfaceImp INTERFACE_IMP = new InterfaceImp();
     private final static Dimension dimension = new Dimension(320, 240);
-    protected  VideoPanel videoPannel;
+    protected VideoPanel videoPannel;
 
-
-    private InterfaceImp() {
-        super();
-
-    }
-    public static InterfaceImp getInterfaceImp()
-    {
+    /**
+     * @return одиночка
+     */
+    public static InterfaceImp getInterfaceImp() {
         return INTERFACE_IMP;
     }
 
-    public void init() {
-
+    /**
+     * Открыть видео трансляцию
+     * @param videoPanel панель для видео
+     * @param ip         адрес видео-сервера
+     */
+    public void openTranslutor(VideoPanel videoPanel, String ip) {
+        this.videoPannel = videoPanel;
+        this.videoPannel.setPreferredSize(dimension);
+        connectToTranslator(image -> videoPannel.updateImage(image), ip);
     }
 
-    public void openTranslutor(VideoPanel videoPanel, String ip, Integer port) {
-
-            this.videoPannel = videoPanel;
-            this.videoPannel.setPreferredSize(dimension);
-            connectToTranslator(new StreamFrameListener() {
-                public void onFrameReceived(BufferedImage image) {
-                    videoPannel.updateImage(image);
-                }
-
-                public void onAudioRecieved(IAudioSamples samples) {
-                }
-            }, ip);
-
-    }
-
-    public void startTranslutor(String ip,Integer port) {
-
-            Webcam.setAutoOpenMode(true);
-            Webcam webcam = Webcam.getDefault();
-            Dimension dimension = new Dimension(320, 240);
-            webcam.setViewSize(dimension);
-            if (webcam == null)
-                System.out.println("err");
-            createTranslator(ip, webcam);
+    /**
+     * создать видео-трансляцию
+     * @param ip адрес
+     */
+    public void startTranslutor(String ip) {
+        Webcam.setAutoOpenMode(true);
+        Webcam webcam = Webcam.getDefault();
+        Dimension dimension = new Dimension(320, 240);
+        webcam.setViewSize(dimension);
+        if (webcam == null)
+            System.out.println("err");
+        createTranslator(ip, webcam);
     }
 }

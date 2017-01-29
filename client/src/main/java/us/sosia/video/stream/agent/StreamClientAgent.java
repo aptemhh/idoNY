@@ -9,11 +9,13 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import us.sosia.video.stream.channel.StreamClientChannelPipelineFactory;
 import us.sosia.video.stream.handler.StreamClientListener;
 import us.sosia.video.stream.handler.StreamFrameListener;
 
+/**
+ * Клиент видео
+ */
 public class StreamClientAgent implements IStreamClientAgent{
 	protected final static Logger logger = LoggerFactory.getLogger(StreamClientAgent.class);
 	protected final ClientBootstrap clientBootstrap;
@@ -21,12 +23,12 @@ public class StreamClientAgent implements IStreamClientAgent{
 	protected final StreamFrameListener streamFrameListener;
 	protected final Dimension dimension;
 	protected Channel clientChannel;
-	
-	
-	
-	
 
-
+	/**
+	 * Конструктор
+	 * @param streamFrameListener обработчик видео
+	 * @param dimension размер видео
+	 */
 	public StreamClientAgent(StreamFrameListener streamFrameListener,
 			Dimension dimension) {
 		super();
@@ -44,37 +46,53 @@ public class StreamClientAgent implements IStreamClientAgent{
 						dimension));
 	}
 
-
+	/**
+	 * Подключиться к видео серверу
+	 * @param streamServerAddress
+	 */
 	public void connect(SocketAddress streamServerAddress) {
 		logger.info("going to connect to stream server :{}",streamServerAddress);
 		clientBootstrap.connect(streamServerAddress);
 	}
 
-
+	/**
+	 * Остановить подключение к серверу
+	 */
 	public void stop() {
 		clientChannel.close();
 		clientBootstrap.releaseExternalResources();
 	}
 
+	/**
+	 * Обработчик подключения к серверу
+	 */
 	protected class StreamClientListenerIMPL implements StreamClientListener{
 
-
+		/**
+		 * создано подключение с сервером
+		 * @param channel канал с севером
+		 */
 		public void onConnected(Channel channel) {
 			logger.info("stream connected to server at :{}",channel);
 			clientChannel = channel;
 		}
 
-
+		/**
+		 * Обработчик отключения потока
+		 * @param channel канал с севером
+		 */
 		public void onDisconnected(Channel channel) {
 			logger.info("stream disconnected to server at :{}",channel);
 		}
 
-
+		/**
+		 * Обработчик ошибки в канале
+		 * @param channel канал с севером
+		 * @param t ошибка
+		 */
 		public void onException(Channel channel, Throwable t) {
 			logger.debug("exception at :{},exception :{}",channel,t);
 		}
-
-
 		
 	}
 	

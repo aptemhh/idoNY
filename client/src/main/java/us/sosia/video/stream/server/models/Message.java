@@ -60,7 +60,12 @@ public class Message {
     }
 
     public Message() {
-        login=Person.getInstanse().getLogin();
-        pass=Person.getInstanse().getPassword();
+    }
+
+    public Message(boolean lezyInit) {
+        if(lezyInit) {
+            login = Person.getInstanse().getLogin();
+            pass = Person.getInstanse().getPassword();
+        }
     }
 }

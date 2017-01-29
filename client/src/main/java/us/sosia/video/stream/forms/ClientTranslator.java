@@ -44,7 +44,7 @@ public class ClientTranslator extends JFrame{
                     Person.keyP=connectTC.getKey();
 
                     InterfaceImp.getInterfaceImp().connectServerAdressAccept(new InetSocketAddress(connectTC.getIp(),Person.portP).getAddress(),Person.portP,connectTC.getKey());
-                    InterfaceImp.getInterfaceImp().openTranslutor(videoPanel, connectTC.getIp(), connectTC.getPort());
+                    InterfaceImp.getInterfaceImp().openTranslutor(videoPanel, connectTC.getIp());
 
                 }  catch (Exception e1) {
                     e1.printStackTrace();

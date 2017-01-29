@@ -4,7 +4,9 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.buffer.HeapChannelBufferFactory;
 
-
+/**
+ *
+ */
 public class FrameDecoder{
 	protected ChannelBuffer dataSink = ChannelBuffers.dynamicBuffer(65536, new HeapChannelBufferFactory());
 	protected final int headLength;
@@ -45,7 +47,6 @@ public class FrameDecoder{
             dataSink.skipBytes(headLength);
         }
         int frameLengthInt = (int) frameLength;
-      //  System.out.println("frame length :"+frameLengthInt);
         final ChannelBuffer frame;
         if (dataSink.readableBytes() >= frameLengthInt + headLength) {
         	dataSink.skipBytes(headLength);
@@ -57,7 +58,4 @@ public class FrameDecoder{
 		}
 		return frame;
 	}
-
-
-
 }

@@ -30,7 +30,7 @@ public class SettingTListner extends MessageListner {
 
     public List<String> BisnessLogic(ConnectorServer connectorServer) throws TimeoutException {
 
-        Message mess = new Message();
+        Message mess = new Message(true);
         mess.setType(SettingTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         SettingTS createT = new SettingTS();
@@ -53,7 +53,7 @@ public class SettingTListner extends MessageListner {
     }
     public void sendSetting(ConnectorServer connectorServer,List<String> logins,Long idTranslator)
     {
-        Message message=new Message();
+        Message message=new Message(true);
         message.setUuid(UUID.randomUUID());
         message.setType(SettingTSO.class.getName());
         SettingTSO settingTSO=new SettingTSO();
