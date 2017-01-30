@@ -19,14 +19,28 @@ public class MessageListners {
     Map<Class,MessageListner> listnerArray = new HashMap<Class, MessageListner>();
     protected final static Logger logger = LoggerFactory.getLogger(MessageListners.class);
 
+    /**
+     * добавить читатель потока
+     * @param name класс читатаеля
+     * @param listner читатель
+     */
     public void addListner(Class name,MessageListner listner) {
         listnerArray.put(name,listner);
     }
 
-    public void deleteListner(MessageListner listner) {
-        listnerArray.remove(listner);
+    /**
+     * удалить читатель
+     * @param aClass класс читателя
+     */
+    public void deleteListner(Class aClass) {
+        listnerArray.remove(aClass);
     }
 
+    /**
+     *
+     * @param message
+     * @param channelHandlerContext
+     */
     public void submitLisners(Message message, ChannelHandlerContext channelHandlerContext) {
         Message message1;
         for (MessageListner messageListner : listnerArray.values()) {
@@ -44,6 +58,12 @@ public class MessageListners {
             }
         }
     }
+
+    /**
+     * вызов листнера с логикой
+     * @param name
+     * @return
+     */
     public MessageListner getListner(Class name)
     {
         return listnerArray.get(name);

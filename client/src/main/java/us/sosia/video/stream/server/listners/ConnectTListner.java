@@ -12,6 +12,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 04.01.17.
+ * получение реквезитов транслятора
  */
 public class ConnectTListner extends MessageListner {
 

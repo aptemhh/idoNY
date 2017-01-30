@@ -9,7 +9,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class CreateTS extends Data{
+    /**
+     * ip транслятора
+     */
     String ip;
+    /**
+     * порт
+     */
     Integer port;
     public String getIp() {
         return ip;

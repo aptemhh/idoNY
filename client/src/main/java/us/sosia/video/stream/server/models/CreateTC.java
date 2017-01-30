@@ -9,7 +9,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class CreateTC extends Data{
+    /**
+     * ключ
+     */
     String key;
+    /**
+     * id странслятора
+     */
     Long idTranslator;
 
     public Long getIdTranslator() {

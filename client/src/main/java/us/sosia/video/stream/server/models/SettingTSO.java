@@ -7,7 +7,13 @@ import java.util.List;
  * Created by idony on 05.01.17.
  */
 public class SettingTSO  extends Data {
+    /**
+     * список логинов для одобрения
+     */
     List<String> logins;
+    /**
+     * id транслятора
+     */
     Long idTranslator;
 
     @XmlElement(name = "login")

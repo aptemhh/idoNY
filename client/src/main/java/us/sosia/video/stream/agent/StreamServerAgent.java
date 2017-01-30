@@ -71,7 +71,7 @@ public class StreamServerAgent implements IStreamServerAgent {
 				dimension));
 		this.timeWorker = new ScheduledThreadPoolExecutor(1);
 		this.encodeWorker = Executors.newSingleThreadExecutor();
-		this.h264StreamEncoder = new H264StreamEncoder(dimension, false);
+		this.h264StreamEncoder = new H264StreamEncoder(dimension);
 		this.socketAddresses = socketAddresses;
 	}
 

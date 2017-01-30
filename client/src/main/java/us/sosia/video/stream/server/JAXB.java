@@ -10,48 +10,36 @@ import java.io.*;
 
 /**
  * Created by idony on 01.01.17.
+ * xml->object
+ * object->xml
  */
 
 public class JAXB {
 
+    /**
+     * object->xml
+     * @param out выходной xml
+     * @param inputStream объект
+     * @param classes классы объекста
+     * @throws JAXBException
+     */
     public static void marshal(Writer out, Object inputStream, Class... classes) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(classes);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
         jaxbMarshaller.marshal(inputStream, out);
-
     }
 
+    /**
+     * xml->object
+     * @param inputStream xml
+     * @param classes классы объектов
+     * @return результирующий объект
+     * @throws JAXBException
+     */
     public static Object unmarshal(Reader inputStream, Class... classes) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(classes);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         return jaxbUnmarshaller.unmarshal(inputStream);
-    }
-
-    public static void main(String[] array) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-
-//        Message mess = new Message();
-//        mess.setType(CreateT.class.getName());
-//        CreateT createT = (CreateT) Class.forName(CreateT.class.getName()).newInstance();
-//        createT.setIp("1..2.3.3");
-//        mess.setLogin("login1");
-//        mess.setPass("pass1");
-//        mess.setData(createT);
-        StringWriter outputStream = new StringWriter();
-
-//
-//        try {
-////            marshal(outputStream, mess, Message.class, CreateT.class);
-//            System.out.println(outputStream.getBuffer());
-////            marshal(outputStream, mess, Message.class, ConnectTS.class);
-//            System.out.println(outputStream.getBuffer());
-//            Message message=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class);
-//            Message message2=(Message)unmarshal(new StringReader(outputStream.getBuffer().toString()), Message.class,Class.forName(message.getType()));
-//
-//        } catch (JAXBException e) {
-//            e.printStackTrace();
-//        }
-
     }
 }

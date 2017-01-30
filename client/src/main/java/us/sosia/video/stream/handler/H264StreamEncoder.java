@@ -13,7 +13,6 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import us.sosia.video.stream.handler.frame.FrameEncoder;
 
 import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.IMetaData;
@@ -26,130 +25,110 @@ import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 
-public class H264StreamEncoder extends OneToOneEncoder{
+/**
+ * Видео кодер
+ */
+public class H264StreamEncoder extends OneToOneEncoder {
 	protected final static Logger logger = LoggerFactory.getLogger(Logger.class);
 	protected IStreamCoder iStreamCoder;
 	{
 		iStreamCoder = IStreamCoder.make(Direction.ENCODING, ICodec.ID.CODEC_ID_MPEG4);
-		if(iStreamCoder==null) System.out.println("errr");
 	}
-
 	protected final IPacket iPacket = IPacket.make();
-	protected long startTime ;
+	protected long startTime;
 	protected final Dimension dimension;
-	protected final FrameEncoder frameEncoder;
-	
 
-	public H264StreamEncoder(Dimension dimension,boolean usingInternalFrameEncoder) {
+	/**
+	 * Конструктор кодировщика видео
+	 * @param dimension размер видео
+	 */
+	public H264StreamEncoder(Dimension dimension) {
 		super();
 		this.dimension = dimension;
-		if (usingInternalFrameEncoder) {
-			frameEncoder = new FrameEncoder(4);
-		}else {
-			frameEncoder = null;
-		}
 		initialize();
 	}
 
-	private void initialize(){
-		//setup
-	 	iStreamCoder.setNumPicturesInGroupOfPictures(25);
-
+	/**
+	 * настройка кодировщика
+	 */
+	private void initialize() {
+		iStreamCoder.setNumPicturesInGroupOfPictures(25);
 		iStreamCoder.setBitRate(200000);
 		iStreamCoder.setBitRateTolerance(10000);
 		iStreamCoder.setPixelType(Type.YUV420P);
 		iStreamCoder.setHeight(dimension.height);
 		iStreamCoder.setWidth(dimension.width);
-	 	iStreamCoder.setFlag(IStreamCoder.Flags.FLAG_QSCALE, true);
- 		iStreamCoder.setGlobalQuality(0);
-		//rate
- 		IRational rate = IRational.make(25, 1);
- 		iStreamCoder.setFrameRate(rate);
- 		//time base
- 		//iStreamCoder.setAutomaticallyStampPacketsForStream(true);
- 		iStreamCoder.setTimeBase(IRational.make(rate.getDenominator(),rate.getNumerator()));
- 		IMetaData codecOptions = IMetaData.make();
- 		codecOptions.setValue("tune", "zerolatency");// equals -tune zerolatency in ffmpeg
- 		//open it
- 		int revl = iStreamCoder.open(codecOptions, null);
- 		if (revl < 0) {
+		iStreamCoder.setFlag(IStreamCoder.Flags.FLAG_QSCALE, true);
+		iStreamCoder.setGlobalQuality(0);
+		IRational rate = IRational.make(25, 1);
+		iStreamCoder.setFrameRate(rate);
+
+		iStreamCoder.setTimeBase(IRational.make(rate.getDenominator(), rate.getNumerator()));
+		IMetaData codecOptions = IMetaData.make();
+		codecOptions.setValue("tune", "zerolatency");
+		int revl = iStreamCoder.open(codecOptions, null);
+		if (revl < 0) {
 			throw new RuntimeException("could not open the coder");
 		}
 	}
-	
+
 	protected Object encode(ChannelHandlerContext ctx, Channel channel,
-			Object msg) throws Exception {
+							Object msg) throws Exception {
 		return encode(msg);
 	}
 
+	/**
+	 * Закодировать
+	 * @param msg видеобуффер
+	 * @return закодированный буффер
+	 * @throws Exception
+	 */
 	public Object encode(Object msg) throws Exception {
-		if (msg == null) {
-			return null;
-		}
-		if (!(msg instanceof BufferedImage)) {
-			throw new IllegalArgumentException("your need to pass into an bufferedimage");
-		}
 		logger.info("encode the frame");
-		BufferedImage bufferedImage = (BufferedImage)msg;
-		//here is the encode
-		//convert the image
+		BufferedImage bufferedImage = (BufferedImage) msg;
 		BufferedImage convetedImage = convertToType(bufferedImage, BufferedImage.TYPE_3BYTE_BGR);
 		IConverter converter = ConverterFactory.createConverter(convetedImage, Type.YUV420P);
- 		//to frame
 		long now = System.currentTimeMillis();
 		if (startTime == 0) {
-				startTime = now;
+			startTime = now;
 		}
-		IVideoPicture pFrame = converter.toPicture(convetedImage, (now - startTime)*1000);
-		//pFrame.setQuality(0);
-		iStreamCoder.encodeVideo(iPacket, pFrame, 0) ;
- 		//free the MEM
+		IVideoPicture pFrame = converter.toPicture(convetedImage, (now - startTime) * 1000);
+		iStreamCoder.encodeVideo(iPacket, pFrame, 0);
 		pFrame.delete();
 		converter.delete();
-		//write to the container
 		if (iPacket.isComplete()) {
-
-			//iPacket.delete();
-			//here we send the package to the remote peer
-			try{
+			try {
 				ByteBuffer byteBuffer = iPacket.getByteBuffer();
 				if (iPacket.isKeyPacket()) {
 					logger.info("key frame");
 				}
 				ChannelBuffer channelBuffe = ChannelBuffers.copiedBuffer(byteBuffer.order(ByteOrder.BIG_ENDIAN));
-				if (frameEncoder != null) {
-					return frameEncoder.encode(channelBuffe);
-				}
 				return channelBuffe;
 
-			}finally{
+			} finally {
 				iPacket.reset();
 			}
-		}else{
+		} else {
 			return null;
 		}
 	}
+
+	/**
+	 * конвектор буффер изображения
+	 * @param sourceImage исходное изображение
+	 * @param targetType желаемый тип изображения
+	 * @return желаемое изображение
+	 */
 	public static BufferedImage convertToType(BufferedImage sourceImage,
-											  int targetType)
-	{
+											  int targetType) {
 		BufferedImage image;
-
-		// if the source image is already the target type, return the source image
-
 		if (sourceImage.getType() == targetType)
 			image = sourceImage;
-
-			// otherwise create a new image of the target type and draw the new
-			// image
-
-		else
-		{
+		else {
 			image = new BufferedImage(sourceImage.getWidth(),
 					sourceImage.getHeight(), targetType);
 			image.getGraphics().drawImage(sourceImage, 0, 0, null);
 		}
-
 		return image;
 	}
-
 }

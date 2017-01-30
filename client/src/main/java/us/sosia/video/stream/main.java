@@ -10,11 +10,11 @@ import javax.swing.*;
 
 /**
  * Created by idony on 06.01.17.
+ * Класс запуска форм
  */
 public class main {
     public static void main(String[] bud) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-
         ConnectorServer connectorServer = ConnectorServer.getInstate();
         try {
             connectorServer.connect();
@@ -25,7 +25,5 @@ public class main {
         FormManager.add(ClientTranslator.class);
         FormManager.add(CreateTranslator.class);
         FormManager.show(Autorisation.class);
-
-
     }
 }

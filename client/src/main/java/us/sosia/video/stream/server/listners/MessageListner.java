@@ -16,13 +16,13 @@ public abstract class MessageListner {
     protected final static Logger logger = LoggerFactory.getLogger(MessageListner.class);
     static UUID current = null;
     static final Object monitor = new Object();
-   private volatile Message message;
+    private volatile Message message;
 
     public void Notify() {
         synchronized (monitor) {
             current = null;
             monitor.notify();
-            System.out.println("notify"+this);
+            System.out.println("notify" + this);
 
         }
     }
@@ -32,13 +32,11 @@ public abstract class MessageListner {
     public void Wait(long l) throws TimeoutException {
         synchronized (monitor) {
             i = 0;
-            while (current != null||message==null) {
+            while (current != null || message == null) {
                 try {
                     if (l < 0) monitor.wait();
                     else
                         monitor.wait(l);
-
-                    System.out.println("wait"+this);
                     if (i > 40) throw new TimeoutException();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

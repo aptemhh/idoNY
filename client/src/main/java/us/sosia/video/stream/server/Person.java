@@ -4,19 +4,20 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 
 /**
- * Created by idony on 06.01.17.
+ * Статисечкие данные ip,key
  */
 public class Person {
     String login;
     String password;
-    static Person person=new Person();
-    public static Integer portT= 20000;
-    public static Integer portS= 20001;
-    public static Integer portP= 15044;
-    public static Integer portA= 15048;
+    static Person person = new Person();
+    public static Integer portT = 20000;
+    public static Integer portS = 20001;
+    public static Integer portP = 15044;
+    public static Integer portA = 15048;
     public static String ip;
-    public static String keyS="123";
-    public static String keyP="123";
+    public static String keyS = "123";
+    public static String keyP = "123";
+
     {
         try {
             ip = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses().nextElement().getCanonicalHostName();
@@ -24,6 +25,7 @@ public class Person {
             e.printStackTrace();
         }
     }
+
     public String getLogin() {
         return person.login;
     }
@@ -42,8 +44,8 @@ public class Person {
 
     private Person() {
     }
-    public static Person getInstanse()
-    {
+
+    public static Person getInstanse() {
         return person;
     }
 

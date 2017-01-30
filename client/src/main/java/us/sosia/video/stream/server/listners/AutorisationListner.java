@@ -9,9 +9,9 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 06.01.17.
+ * авторизация
  */
 public class AutorisationListner extends MessageListner {
-
 
     public Message reader(Message message) {
         if (message == null || message.getUuid() == null || current == null) return null;

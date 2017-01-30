@@ -12,8 +12,17 @@ import java.util.UUID;
  */
 @XmlRootElement
 public class Message {
+    /**
+     * тип data
+     */
     String type;
+    /**
+     * данные
+     */
     Data data;
+    /**
+     * индификатор сообщения
+     */
     UUID uuid;
 
     public UUID getUuid() {

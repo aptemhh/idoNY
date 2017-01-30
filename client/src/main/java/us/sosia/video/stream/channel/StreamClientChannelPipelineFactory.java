@@ -44,7 +44,7 @@ public class StreamClientChannelPipelineFactory implements ChannelPipelineFactor
 		ChannelPipeline pipeline = Channels.pipeline();
 		pipeline.addLast("stream client handler", new StreamClientHandler(streamClientListener));
 		pipeline.addLast("frame decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4,0,4));
-		pipeline.addLast("stream handler", new H264StreamDecoder(streamFrameListener,dimension,false,false));
+		pipeline.addLast("stream handler", new H264StreamDecoder(streamFrameListener,dimension));
 		return pipeline;
 	}
 

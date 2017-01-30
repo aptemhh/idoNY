@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class ConnectTS extends Data {
+    /**
+     * логин, к которорому подключаемся
+     */
     String login;
 
     public String getLogin() {

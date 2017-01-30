@@ -9,6 +9,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 05.01.17.
+ * настройка транслятора
  */
 public class SettingTListner extends MessageListner {
 
@@ -18,7 +19,6 @@ public class SettingTListner extends MessageListner {
         if (message.getData() != null && message.getType().equals(SettingTC.class.getName())) {
             if (current.equals(message.getUuid())) {
                 setMessage(message);
-
                 Notify();
             } else {
                 logger.error("UUID не совпадают!!!");
@@ -51,6 +51,7 @@ public class SettingTListner extends MessageListner {
         setMessage(null);
         return ((SettingTC)message.getData()).getLogins();
     }
+
     public void sendSetting(ConnectorServer connectorServer,List<String> logins,Long idTranslator)
     {
         Message message=new Message(true);

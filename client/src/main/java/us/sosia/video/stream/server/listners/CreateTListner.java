@@ -11,6 +11,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 05.01.17.
+ * создание трнаслятора
  */
 public class CreateTListner extends MessageListner {
 

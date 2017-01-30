@@ -9,29 +9,42 @@ import org.jboss.netty.channel.WriteCompletionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Обработчик прокси для логивания
+ */
 public class StreamServerHandler extends SimpleChannelHandler{
 	protected final StreamServerListener streamServerListener;
 	protected final static Logger logger = LoggerFactory.getLogger(StreamServerHandler.class);
-	
-	
 
+	/**
+	 * Конструктор
+	 * @param streamServerListener обработчик
+	 */
 	public StreamServerHandler(StreamServerListener streamServerListener) {
 		super();
 		this.streamServerListener = streamServerListener;
 	}
 
+	/**
+	 * в канале ошибка
+	 * @param ctx канал
+	 * @param e ошибка
+	 * @throws Exception
+	 */
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 			throws Exception {
 		Channel channel = e.getChannel();
 		Throwable t = e.getCause();
 		logger.debug("exception caught at :{},exception :{}",channel,t);
 		streamServerListener.onExcaption(channel, t);
-		//super.exceptionCaught(ctx, e);
 	}
-	
-	
 
-
+	/**
+	 * в канале ошибка
+	 * @param ctx канал
+	 * @param e статус
+	 * @throws Exception
+	 */
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 			throws Exception {
 		Channel channel = e.getChannel();
@@ -40,7 +53,12 @@ public class StreamServerHandler extends SimpleChannelHandler{
 		super.channelConnected(ctx, e);
 	}
 
-
+	/**
+	 *  канал закрыт
+	 * @param ctx канал
+	 * @param e статус
+	 * @throws Exception
+	 */
 	public void channelDisconnected(ChannelHandlerContext ctx,
 			ChannelStateEvent e) throws Exception {
 		Channel channel = e.getChannel();
@@ -53,8 +71,5 @@ public class StreamServerHandler extends SimpleChannelHandler{
 			throws Exception {
 		super.writeComplete(ctx, e);
 	}
-	
-	
-	
 	
 }

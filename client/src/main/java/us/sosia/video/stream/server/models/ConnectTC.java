@@ -11,10 +11,18 @@ public class ConnectTC extends Data {
         return ip;
     }
 
+    /**
+     * адресс
+     * @param ip
+     */
     public void setIp(String ip) {
         this.ip = ip;
     }
 
+    /**
+     * порт
+     * @return
+     */
     public Integer getPort() {
         return port;
     }
@@ -27,6 +35,10 @@ public class ConnectTC extends Data {
         this.key = key;
     }
 
+    /**
+     * ключ
+     * @return
+     */
     public String getKey() {
         return key;
     }
