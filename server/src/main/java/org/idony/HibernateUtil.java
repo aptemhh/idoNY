@@ -31,10 +31,16 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
+    /**
+     * сохранить объект
+     * @param o объект для сохранения
+     * @return id записи
+     * @throws Exception
+     */
     public static Serializable save(Object o) throws Exception {
         Session session = getSessionFactory().openSession();
         Transaction tx = null;
-        Serializable serializable = null;
+        Serializable serializable;
         try {
             tx = session.beginTransaction();
             serializable = session.save(o);
@@ -59,11 +65,20 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * закрыть подключение к бд
+     */
     public static void shutdown() {
         // Close caches and connection pools
         getSessionFactory().close();
     }
 
+    /**
+     * проверка логина\пас
+     * @param login логин
+     * @param pass пасс
+     * @return true прошел авторизацию
+     */
     public static Boolean security(String login, String pass) {
         Session session = sessionFactory.openSession();
         Boolean connectors;
@@ -79,6 +94,10 @@ public class HibernateUtil {
         return connectors;
     }
 
+    /**
+     * очитстка таблицы
+     * @param table имя таблицы
+     */
     public static void trancate(String table) {
         Session session = sessionFactory.openSession();
         Transaction tx = null;

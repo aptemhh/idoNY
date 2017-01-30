@@ -15,18 +15,35 @@ import java.util.ArrayList;
 
 /**
  * Created by idony on 04.01.17.
+ * Менеджер обработчиков
  */
 public class MessageListners {
     ArrayList<MessageListner> listnerArray=new ArrayList<MessageListner>();
     protected final static Logger logger = LoggerFactory.getLogger(MessageListners.class);
+
+    /**
+     * добавить в обработку
+     * @param listner обработчик
+     */
     public void addListner(MessageListner listner)
     {
         listnerArray.add(listner);
     }
+
+    /**
+     * удалить обработчик
+     * @param listner обработчик
+     */
     public void deleteListner(MessageListner listner)
     {
         listnerArray.remove(listner);
     }
+
+    /**
+     * сообщить всем обработкам сообщение
+     * @param message пришедшее сообщение
+     * @param channelHandlerContext канал
+     */
     public void submitLisners(Message message,ChannelHandlerContext channelHandlerContext)
     {
         if(!HibernateUtil.security(message.getLogin(), message.getPass())&&!(message.getType().equals(Data.class.getName())))

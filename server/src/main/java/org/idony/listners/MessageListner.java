@@ -6,6 +6,7 @@ import us.sosia.video.stream.server.models.Message;
 
 /**
  * Created by idony on 04.01.17.
+ * интерфейс обработчиков
  */
 public interface MessageListner {
     final static Logger logger = LoggerFactory.getLogger(MessageListner.class);

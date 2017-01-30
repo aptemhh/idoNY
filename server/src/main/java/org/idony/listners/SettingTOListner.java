@@ -17,21 +17,19 @@ import java.util.List;
 
 /**
  * Created by idony on 05.01.17.
+ * обработчик настроек транслятора
  */
 public class SettingTOListner implements MessageListner {
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
     public Message reader(Message message) {
-
         if (message.getData() instanceof SettingTSO) {
             SettingTSO data = (SettingTSO) message.getData();
-
             Session session = sessionFactory.openSession();
-            Boolean connectors =
-                    session.createCriteria(Translator.class).add(Restrictions.eq("login", new Login(message.getLogin()))).
-                            add(Restrictions.eq("id", data.getIdTranslator()))
-                            .list().size() != 0;
+            session.createCriteria(Translator.class).add(Restrictions.eq("login", new Login(message.getLogin()))).
+                    add(Restrictions.eq("id", data.getIdTranslator()))
+                    .list().size();
             session.close();
             Connector connector;
             for (String s : data.getLogins()) {
@@ -44,7 +42,6 @@ public class SettingTOListner implements MessageListner {
                     e.printStackTrace();
                 }
             }
-
         }
         return null;
     }

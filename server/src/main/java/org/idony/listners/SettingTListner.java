@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by idony on 05.01.17.
+ * отправка списка логинов
  */
 public class SettingTListner implements MessageListner {
 
