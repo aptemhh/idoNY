@@ -10,6 +10,7 @@ import java.util.UUID;
 
 /**
  * Created by idony on 05.01.17.
+ * обработка реквезитов транслятора
  */
 public class CreateTListner implements MessageListner {
 
@@ -17,8 +18,10 @@ public class CreateTListner implements MessageListner {
         Message mess = null;
 
         if (message.getData() instanceof CreateTS) {
-            CreateTS data = (CreateTS) message.getData();
+//            HibernateUtil.trancate("connection");
+//            HibernateUtil.trancate("translator");
 
+            CreateTS data = (CreateTS) message.getData();
             Translator translator=new Translator();
             translator.setIp(data.getIp());
             translator.setLogin(new Login(message.getLogin()));
