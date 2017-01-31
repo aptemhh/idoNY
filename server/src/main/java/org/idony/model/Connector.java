@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "connection")
-public class Connector  implements Serializable {
+public class Connector implements Serializable {
     private Long id;
     Login login;
     Translator idTranslator;
@@ -18,6 +18,7 @@ public class Connector  implements Serializable {
     public Login getLogin() {
         return login;
     }
+
     @ManyToOne
     @JoinColumn(name = "ID_TRANSLATOR")
     public Translator getIdTranslator() {

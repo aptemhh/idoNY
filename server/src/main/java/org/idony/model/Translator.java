@@ -46,13 +46,14 @@ public class Translator implements Serializable {
     public String getKey() {
         return key;
     }
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "LOGIN")
     public Login getLogin() {
         return login;
     }
 
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_TRANSLATOR")
     public List<Connector> getConnectors() {
         return connectors;

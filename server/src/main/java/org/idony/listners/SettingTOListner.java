@@ -1,6 +1,5 @@
 package org.idony.listners;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -8,12 +7,8 @@ import org.idony.HibernateUtil;
 import org.idony.model.Connector;
 import org.idony.model.Login;
 import org.idony.model.Translator;
-import us.sosia.video.stream.server.models.ConnectTC;
-import us.sosia.video.stream.server.models.ConnectTS;
 import us.sosia.video.stream.server.models.Message;
 import us.sosia.video.stream.server.models.SettingTSO;
-
-import java.util.List;
 
 /**
  * Created by idony on 05.01.17.

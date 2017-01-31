@@ -13,6 +13,7 @@ public class ConnectTS extends Data {
     public String getLogin() {
         return login;
     }
+
     @XmlElement
     public void setLogin(String login) {
         this.login = login;

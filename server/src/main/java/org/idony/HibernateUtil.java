@@ -6,7 +6,6 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.idony.model.Login;
-import org.idony.model.Translator;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,6 +32,7 @@ public class HibernateUtil {
 
     /**
      * сохранить объект
+     *
      * @param o объект для сохранения
      * @return id записи
      * @throws Exception
@@ -75,8 +75,9 @@ public class HibernateUtil {
 
     /**
      * проверка логина\пас
+     *
      * @param login логин
-     * @param pass пасс
+     * @param pass  пасс
      * @return true прошел авторизацию
      */
     public static Boolean security(String login, String pass) {
@@ -96,6 +97,7 @@ public class HibernateUtil {
 
     /**
      * очитстка таблицы
+     *
      * @param table имя таблицы
      */
     public static void trancate(String table) {

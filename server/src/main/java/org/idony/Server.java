@@ -1,20 +1,13 @@
 package org.idony;
 
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
-import io.netty.channel.group.*;
-import io.netty.bootstrap.*;
-
 import io.netty.channel.socket.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
-import io.netty.handler.codec.*;
+import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.CharsetUtil;
 import org.idony.listners.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,26 +15,17 @@ import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBException;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
-import java.net.SocketAddress;
-
 import java.net.SocketException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.concurrent.Executors;
 
 /**
  * Created by idony on 02.01.17.
  * сервер с бд
  */
-public class Server extends MessageListners{
+public class Server extends MessageListners {
     protected final static Logger logger = LoggerFactory.getLogger(Server.class);
     protected ServerBootstrap b;
-    Integer i=0;
+    Integer i = 0;
 
     public Server() throws SocketException {
 
@@ -62,7 +46,7 @@ public class Server extends MessageListners{
                         byteBuf.writeZero(byteBuf.capacity());
                         byteBuf.clear();
                         keyClient = keyClient.substring(0, keyClient.indexOf(0));
-                        if (keyClient.length() <5) return null;
+                        if (keyClient.length() < 5) return null;
                         logger.info("Пришло сообщение :\n----------{}-----------", keyClient);
                         System.out.println(keyClient + "\n" +
                                 "----------________-----------");
@@ -90,15 +74,20 @@ public class Server extends MessageListners{
                     public void beforeAdd(ChannelHandlerContext channelHandlerContext) throws Exception {
                         logger.info("Подключился :{}", channelHandlerContext.channel().remoteAddress());
                     }
+
                     public void afterAdd(ChannelHandlerContext channelHandlerContext) throws Exception {
                     }
+
                     public void beforeRemove(ChannelHandlerContext channelHandlerContext) throws Exception {
                         logger.info("Отключился :{}", channelHandlerContext.channel().remoteAddress());
                     }
+
                     public void afterRemove(ChannelHandlerContext channelHandlerContext) throws Exception {
                     }
+
                     public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable throwable) throws Exception {
                     }
+
                     public void userEventTriggered(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
                     }
                 });
@@ -108,6 +97,7 @@ public class Server extends MessageListners{
 
     /**
      * запустить сервер
+     *
      * @param port порт
      * @throws InterruptedException
      * @throws SocketException
@@ -121,7 +111,7 @@ public class Server extends MessageListners{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info("start server :{}",ch.localAddress());
+        logger.info("start server :{}", ch.localAddress());
     }
 
     /**

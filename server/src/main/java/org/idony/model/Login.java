@@ -1,4 +1,5 @@
 package org.idony.model;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,13 +9,13 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "USERS")
-@NamedQuery(name = "getLogins",query = "select login from org.idony.model.Login l order by login")
+@NamedQuery(name = "getLogins", query = "select login from org.idony.model.Login l order by login")
 public class Login implements Serializable {
     String login;
     String password;
 
     @Id
-    @Column (name = "LOGIN",nullable = false)
+    @Column(name = "LOGIN", nullable = false)
     public String getLogin() {
         return login;
     }
@@ -27,6 +28,7 @@ public class Login implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public void setLogin(String login) {
         this.login = login;
     }
@@ -34,6 +36,7 @@ public class Login implements Serializable {
     public Login(String login) {
         this.login = login;
     }
+
     public Login() {
 
     }

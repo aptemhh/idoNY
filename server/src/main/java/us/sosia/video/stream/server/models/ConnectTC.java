@@ -7,6 +7,7 @@ public class ConnectTC extends Data {
     String ip;
     Integer port;
     String key;
+
     public String getIp() {
         return ip;
     }

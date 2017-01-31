@@ -8,13 +8,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by idony on 01.01.17.
  */
 @XmlRootElement
-public class CreateTC extends Data{
+public class CreateTC extends Data {
     String key;
     Long idTranslator;
 
     public Long getIdTranslator() {
         return idTranslator;
     }
+
     @XmlElement
     public void setIdTranslator(Long idTranslator) {
         this.idTranslator = idTranslator;
@@ -23,6 +24,7 @@ public class CreateTC extends Data{
     public String getKey() {
         return key;
     }
+
     @XmlElement
     public void setKey(String key) {
         this.key = key;

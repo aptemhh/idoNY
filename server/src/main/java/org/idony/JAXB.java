@@ -4,11 +4,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * Created by idony on 01.01.17.
  */
+
 /**
  * Created by idony on 01.01.17.
  * xml->object

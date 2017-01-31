@@ -3,7 +3,6 @@ package org.idony.listners;
 import io.netty.channel.ChannelHandlerContext;
 import org.idony.HibernateUtil;
 import org.idony.JAXB;
-import org.idony.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.sosia.video.stream.server.models.Data;
@@ -18,42 +17,40 @@ import java.util.ArrayList;
  * Менеджер обработчиков
  */
 public class MessageListners {
-    ArrayList<MessageListner> listnerArray=new ArrayList<MessageListner>();
+    ArrayList<MessageListner> listnerArray = new ArrayList<MessageListner>();
     protected final static Logger logger = LoggerFactory.getLogger(MessageListners.class);
 
     /**
      * добавить в обработку
+     *
      * @param listner обработчик
      */
-    public void addListner(MessageListner listner)
-    {
+    public void addListner(MessageListner listner) {
         listnerArray.add(listner);
     }
 
     /**
      * удалить обработчик
+     *
      * @param listner обработчик
      */
-    public void deleteListner(MessageListner listner)
-    {
+    public void deleteListner(MessageListner listner) {
         listnerArray.remove(listner);
     }
 
     /**
      * сообщить всем обработкам сообщение
-     * @param message пришедшее сообщение
+     *
+     * @param message               пришедшее сообщение
      * @param channelHandlerContext канал
      */
-    public void submitLisners(Message message,ChannelHandlerContext channelHandlerContext)
-    {
-        if(!HibernateUtil.security(message.getLogin(), message.getPass())&&!(message.getType().equals(Data.class.getName())))
+    public void submitLisners(Message message, ChannelHandlerContext channelHandlerContext) {
+        if (!HibernateUtil.security(message.getLogin(), message.getPass()) && !(message.getType().equals(Data.class.getName())))
             return;
         Message message1;
-        for(MessageListner messageListner:listnerArray)
-        {
-            message1= messageListner.reader(message);
-            if(message1!=null)
-            {
+        for (MessageListner messageListner : listnerArray) {
+            message1 = messageListner.reader(message);
+            if (message1 != null) {
                 StringWriter stringWriter = new StringWriter();
                 try {
                     JAXB.marshal(stringWriter, message1, Message.class, message1.getData().getClass());
