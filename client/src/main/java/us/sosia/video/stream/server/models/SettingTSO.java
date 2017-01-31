@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by idony on 05.01.17.
  */
-public class SettingTSO  extends Data {
+public class SettingTSO extends Data {
     /**
      * список логинов для одобрения
      */
@@ -24,6 +24,7 @@ public class SettingTSO  extends Data {
     public void setLogins(List<String> logins) {
         this.logins = logins;
     }
+
     @XmlElement
     public Long getIdTranslator() {
         return idTranslator;

@@ -1,31 +1,19 @@
 package us.sosia.video.stream.agent;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.buffer.BigEndianHeapChannelBuffer;
-import org.jboss.netty.buffer.ByteBufferBackedChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelPipeline;
+import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameDecoder;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameEncoder;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
-import org.jboss.netty.handler.codec.replay.VoidEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.sosia.video.stream.channel.StreamServerChannelPipelineFactory;
-import us.sosia.video.stream.handler.H264StreamDecoder;
-import us.sosia.video.stream.handler.StreamClientHandler;
-import us.sosia.video.stream.handler.StreamServerHandler;
-import us.sosia.video.stream.handler.StreamServerListener;
 
-import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.CharBuffer;
 import java.util.concurrent.Executors;
 
 /**
@@ -40,17 +28,19 @@ public class StreamServerAssept implements IStreamServerAgent {
 
     /**
      * Контруктор-одиночка
+     *
      * @param oneToOneDecoder оброботчик
      * @return одиночку
      */
     public static StreamServerAssept getStreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
-        if(streamServerAssept==null)
-            streamServerAssept=new StreamServerAssept(oneToOneDecoder);
+        if (streamServerAssept == null)
+            streamServerAssept = new StreamServerAssept(oneToOneDecoder);
         return streamServerAssept;
     }
 
     /**
      * Геттер класса
+     *
      * @return одиночку
      */
     public static StreamServerAssept getStreamServerAssept() {
@@ -59,6 +49,7 @@ public class StreamServerAssept implements IStreamServerAgent {
 
     /**
      * Конструктор
+     *
      * @param oneToOneDecoder обработчик входных сообщений
      */
     private StreamServerAssept(final OneToOneDecoder oneToOneDecoder) {
@@ -81,6 +72,7 @@ public class StreamServerAssept implements IStreamServerAgent {
 
     /**
      * Запуск сервера
+     *
      * @param streamAddress
      */
     public void start(SocketAddress streamAddress) {

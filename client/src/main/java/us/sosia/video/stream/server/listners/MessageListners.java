@@ -8,7 +8,6 @@ import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBException;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,20 +15,22 @@ import java.util.Map;
  * Created by idony on 04.01.17.
  */
 public class MessageListners {
-    Map<Class,MessageListner> listnerArray = new HashMap<Class, MessageListner>();
+    Map<Class, MessageListner> listnerArray = new HashMap<Class, MessageListner>();
     protected final static Logger logger = LoggerFactory.getLogger(MessageListners.class);
 
     /**
      * добавить читатель потока
-     * @param name класс читатаеля
+     *
+     * @param name    класс читатаеля
      * @param listner читатель
      */
-    public void addListner(Class name,MessageListner listner) {
-        listnerArray.put(name,listner);
+    public void addListner(Class name, MessageListner listner) {
+        listnerArray.put(name, listner);
     }
 
     /**
      * удалить читатель
+     *
      * @param aClass класс читателя
      */
     public void deleteListner(Class aClass) {
@@ -37,7 +38,6 @@ public class MessageListners {
     }
 
     /**
-     *
      * @param message
      * @param channelHandlerContext
      */
@@ -61,11 +61,11 @@ public class MessageListners {
 
     /**
      * вызов листнера с логикой
+     *
      * @param name
      * @return
      */
-    public MessageListner getListner(Class name)
-    {
+    public MessageListner getListner(Class name) {
         return listnerArray.get(name);
     }
 }

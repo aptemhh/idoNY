@@ -2,7 +2,10 @@ package us.sosia.video.stream.agent;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.buffer.BigEndianHeapChannelBuffer;
-import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.ChannelPipeline;
+import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import org.slf4j.Logger;
@@ -43,8 +46,8 @@ public class StreamClientSoung implements IStreamClientAgent {
                             final byte[] bytes = new byte[((BigEndianHeapChannelBuffer) msg).writerIndex()];
                             ((BigEndianHeapChannelBuffer) msg).readBytes(bytes);
 
-                                if (run)
-                                    new Thread(() -> playJavaSound(bytes)).start();
+                            if (run)
+                                new Thread(() -> playJavaSound(bytes)).start();
 
                             ((BigEndianHeapChannelBuffer) msg).resetWriterIndex();
                             return null;
@@ -62,6 +65,7 @@ public class StreamClientSoung implements IStreamClientAgent {
 
     /**
      * Подключение к транслятору звука
+     *
      * @param streamServerAddress адрес транслятора
      */
     public void connect(SocketAddress streamServerAddress) {
@@ -80,7 +84,8 @@ public class StreamClientSoung implements IStreamClientAgent {
     private static SourceDataLine mLine;
 
     /**
-     *  Настрока аудиовыхода
+     * Настрока аудиовыхода
+     *
      * @throws LineUnavailableException
      */
     private static void openJavaSound() throws LineUnavailableException {
@@ -94,6 +99,7 @@ public class StreamClientSoung implements IStreamClientAgent {
 
     /**
      * Проигрывание звука
+     *
      * @param bytes
      */
     private static synchronized void playJavaSound(byte[] bytes) {
@@ -106,6 +112,7 @@ public class StreamClientSoung implements IStreamClientAgent {
     protected class StreamClientListenerIMPL implements StreamClientListener {
         /**
          * Клиент подключился к серверу
+         *
          * @param channel канал с сервером
          */
         public void onConnected(Channel channel) {
@@ -115,6 +122,7 @@ public class StreamClientSoung implements IStreamClientAgent {
 
         /**
          * связь разорвана
+         *
          * @param channel канал с сервером
          */
         public void onDisconnected(Channel channel) {
@@ -123,8 +131,9 @@ public class StreamClientSoung implements IStreamClientAgent {
 
         /**
          * обработчик ошибки в канале
+         *
          * @param channel канал с сервером
-         * @param t ошибка
+         * @param t       ошибка
          */
         public void onException(Channel channel, Throwable t) {
             logger.debug("exception at :{},exception :{}", channel, t);
@@ -134,6 +143,7 @@ public class StreamClientSoung implements IStreamClientAgent {
 
     /**
      * вкл\выкл звук
+     *
      * @param audio вкл\выкл
      */
     public void setAudio(Boolean audio) {
@@ -144,6 +154,7 @@ public class StreamClientSoung implements IStreamClientAgent {
 
     /**
      * Включен ли звук
+     *
      * @return статус переключателя звука
      */
     public Boolean getAudio() {

@@ -7,12 +7,14 @@ public class ConnectTC extends Data {
     String ip;
     Integer port;
     String key;
+
     public String getIp() {
         return ip;
     }
 
     /**
      * адресс
+     *
      * @param ip
      */
     public void setIp(String ip) {
@@ -21,6 +23,7 @@ public class ConnectTC extends Data {
 
     /**
      * порт
+     *
      * @return
      */
     public Integer getPort() {
@@ -37,6 +40,7 @@ public class ConnectTC extends Data {
 
     /**
      * ключ
+     *
      * @return
      */
     public String getKey() {

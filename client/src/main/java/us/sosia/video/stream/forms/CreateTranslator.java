@@ -5,10 +5,8 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import us.sosia.video.stream.agent.InterfaceImp;
-import us.sosia.video.stream.agent.StreamServerAssept;
 import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Person;
-import us.sosia.video.stream.server.listners.AutorisationListner;
 import us.sosia.video.stream.server.listners.CreateTListner;
 import us.sosia.video.stream.server.listners.SettingTListner;
 import us.sosia.video.stream.server.models.CreateTC;
@@ -18,13 +16,13 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by idony on 06.01.17.
  */
-public class CreateTranslator  extends JFrame {
+public class CreateTranslator extends JFrame {
     private JPanel panel1;
     private JButton одобритьButton;
     private JButton создатьButton;
@@ -74,14 +72,12 @@ public class CreateTranslator  extends JFrame {
                     InterfaceImp.getInterfaceImp().createServerAssept(new OneToOneDecoder() {
                         @Override
                         protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-                            byte[] bytes=((BigEndianHeapChannelBuffer) msg).array();
-                            String keyClient = new String(bytes,2,bytes.length-2);
-                            if(Person.keyS.equals(keyClient))
-                            {
+                            byte[] bytes = ((BigEndianHeapChannelBuffer) msg).array();
+                            String keyClient = new String(bytes, 2, bytes.length - 2);
+                            if (Person.keyS.equals(keyClient)) {
                                 System.out.println("Ключ совпал");
-                                InterfaceImp.getInterfaceImp().addAsseptAddress (((InetSocketAddress)channel.getRemoteAddress()).getHostName());
-                            }
-                            else
+                                InterfaceImp.getInterfaceImp().addAsseptAddress(((InetSocketAddress) channel.getRemoteAddress()).getHostName());
+                            } else
                                 System.out.println("Ключ не совпал");
                             return msg;
                         }

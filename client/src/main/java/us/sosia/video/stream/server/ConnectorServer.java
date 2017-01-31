@@ -1,37 +1,23 @@
 package us.sosia.video.stream.server;
 
 
-import io.netty.buffer.ByteBuf;
-
-import io.netty.channel.*;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
-
 import io.netty.channel.socket.nio.NioEventLoopGroup;
-
 import io.netty.channel.socket.nio.NioSocketChannel;
-
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.sosia.video.stream.agent.StreamClientAgent;
 import us.sosia.video.stream.server.listners.*;
-import us.sosia.video.stream.server.models.*;
+import us.sosia.video.stream.server.models.Message;
 
 import javax.xml.bind.JAXBException;
-import java.io.*;
-import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeoutException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 /**
  * Created by idony on 02.01.17.
@@ -113,6 +99,7 @@ public class ConnectorServer extends MessageListners {
 
     /**
      * Подключиться к серверу с бд
+     *
      * @throws Exception
      */
     public void connect() throws Exception {
@@ -142,10 +129,10 @@ public class ConnectorServer extends MessageListners {
         }
     }
 
-    private class WritterImp implements Writter
-    {
+    private class WritterImp implements Writter {
         /**
          * писать серверу
+         *
          * @param mess объект
          * @return true успешно, false нет
          */

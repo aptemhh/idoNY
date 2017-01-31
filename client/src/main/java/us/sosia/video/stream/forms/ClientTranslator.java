@@ -4,7 +4,6 @@ import us.sosia.video.stream.agent.InterfaceImp;
 import us.sosia.video.stream.agent.ui.VideoPanel;
 import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Person;
-import us.sosia.video.stream.server.listners.AutorisationListner;
 import us.sosia.video.stream.server.listners.ConnectTListner;
 import us.sosia.video.stream.server.models.ConnectTC;
 
@@ -17,7 +16,7 @@ import java.net.InetSocketAddress;
 /**
  * Created by idony on 24.12.16.
  */
-public class ClientTranslator extends JFrame{
+public class ClientTranslator extends JFrame {
     private JPanel panel1;
     private JButton button6456tyutyutyutuButton;
     private JTextField textField1;
@@ -25,9 +24,9 @@ public class ClientTranslator extends JFrame{
     private JButton отключитьсяButton;
     private JButton отклЗвукButton;
     private JButton отклВидеоButton;
-    private VideoPanel videoPanel=new VideoPanel();
+    private VideoPanel videoPanel = new VideoPanel();
 
-    public ClientTranslator(){
+    public ClientTranslator() {
         setContentPane(panel1);
         panel1.add(videoPanel, BorderLayout.CENTER);
 
@@ -37,14 +36,14 @@ public class ClientTranslator extends JFrame{
                 super.mousePressed(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
-                    ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).
-                            BisnessLogic(connectorServer.getWritter(),"user");
-                    Person.keyP=connectTC.getKey();
+                    ConnectTC connectTC = ((ConnectTListner) connectorServer.getListner(ConnectTListner.class)).
+                            BisnessLogic(connectorServer.getWritter(), "user");
+                    Person.keyP = connectTC.getKey();
 
-                    InterfaceImp.getInterfaceImp().connectServerAdressAccept(new InetSocketAddress(connectTC.getIp(),Person.portP).getAddress(),Person.portP,connectTC.getKey());
+                    InterfaceImp.getInterfaceImp().connectServerAdressAccept(new InetSocketAddress(connectTC.getIp(), Person.portP).getAddress(), Person.portP, connectTC.getKey());
                     InterfaceImp.getInterfaceImp().openTranslutor(videoPanel, connectTC.getIp());
 
-                }  catch (Exception e1) {
+                } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }
@@ -57,17 +56,15 @@ public class ClientTranslator extends JFrame{
             }
         });
         отклВидеоButton.addMouseListener(new MouseAdapter() {
-            String s="Вкл. видео",s2="Выкл. видео";
+            String s = "Вкл. видео", s2 = "Выкл. видео";
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(videoPanel.getVisable())
-                {
+                if (videoPanel.getVisable()) {
                     videoPanel.setVisable(false);
                     отклВидеоButton.setText(s);
-                }
-                else {
+                } else {
                     videoPanel.setVisable(true);
                     отклВидеоButton.setText(s2);
                 }
@@ -75,36 +72,29 @@ public class ClientTranslator extends JFrame{
             }
         });
         отклЗвукButton.addMouseListener(new MouseAdapter() {
-            String s="Вкл. звук",s2="Выкл. звук";
+            String s = "Вкл. звук", s2 = "Выкл. звук";
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(InterfaceImp.getInterfaceImp().getAudio())
-                {
+                if (InterfaceImp.getInterfaceImp().getAudio()) {
                     InterfaceImp.getInterfaceImp().setAudio(false);
                     отклЗвукButton.setText(s);
-                }
-                else {
+                } else {
                     InterfaceImp.getInterfaceImp().setAudio(true);
                     отклЗвукButton.setText(s2);
                 }
-
             }
         });
     }
 
     public static void main(String[] bud) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        ClientTranslator form=new ClientTranslator();
+        ClientTranslator form = new ClientTranslator();
         form.pack();
         form.setVisible(true);
         form.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     }
 
-    private void createUIComponents() {
-
-
-    }
+    private void createUIComponents() {}
 }

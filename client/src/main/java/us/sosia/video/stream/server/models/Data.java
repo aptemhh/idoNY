@@ -1,7 +1,5 @@
 package us.sosia.video.stream.server.models;
 
-import com.sun.xml.txw2.annotation.XmlElement;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**

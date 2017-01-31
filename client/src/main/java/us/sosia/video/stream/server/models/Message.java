@@ -28,6 +28,7 @@ public class Message {
     public UUID getUuid() {
         return uuid;
     }
+
     @XmlElement
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
@@ -40,6 +41,7 @@ public class Message {
     public Data getData() {
         return data;
     }
+
     @XmlElement
     public void setData(Data data) {
         this.data = data;
@@ -49,12 +51,14 @@ public class Message {
     public void setType(String type) {
         this.type = type;
     }
+
     String login;
     String pass;
 
     public String getLogin() {
         return login;
     }
+
     @XmlElement
     public void setLogin(String login) {
         this.login = login;
@@ -63,6 +67,7 @@ public class Message {
     public String getPass() {
         return pass;
     }
+
     @XmlElement
     public void setPass(String pass) {
         this.pass = pass;
@@ -72,7 +77,7 @@ public class Message {
     }
 
     public Message(boolean lezyInit) {
-        if(lezyInit) {
+        if (lezyInit) {
             login = Person.getInstanse().getLogin();
             pass = Person.getInstanse().getPassword();
         }

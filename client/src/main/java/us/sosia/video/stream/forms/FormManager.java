@@ -1,6 +1,5 @@
 package us.sosia.video.stream.forms;
 
-import javax.rmi.CORBA.ClassDesc;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,22 +16,24 @@ public class FormManager {
 
     /**
      * Добавить форму
+     *
      * @param aClass класс формы
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
     public static void add(Class aClass) throws IllegalAccessException, InstantiationException {
-        JFrame jFrame= (JFrame) aClass.newInstance();
+        JFrame jFrame = (JFrame) aClass.newInstance();
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         classJFrameMap.put(aClass, jFrame);
     }
 
     /**
      * Показать форму
+     *
      * @param aClass класс формы
      */
     public static void show(Class aClass) {
-        JFrame jFrame=classJFrameMap.get(aClass);
+        JFrame jFrame = classJFrameMap.get(aClass);
         jFrameVisible.add(jFrame);
         jFrame.setVisible(true);
         jFrame.pack();
@@ -41,10 +42,8 @@ public class FormManager {
     /**
      * Скрыть все формы
      */
-    public static void hideAll()
-    {
-        for (JFrame jFrame:jFrameVisible)
-        {
+    public static void hideAll() {
+        for (JFrame jFrame : jFrameVisible) {
             jFrame.setVisible(false);
         }
     }

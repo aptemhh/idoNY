@@ -1,12 +1,5 @@
 package us.sosia.video.stream.agent;
 
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.function.Predicate;
-
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
@@ -19,11 +12,15 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import us.sosia.video.stream.handler.StreamServerHandler;
 import us.sosia.video.stream.handler.StreamServerListener;
 
 import javax.sound.sampled.*;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
  * Сервер отправки звука
@@ -38,6 +35,7 @@ public class StreamServerSoung extends Thread {
 
     /**
      * Конструктор
+     *
      * @param socketAddresses список одобренных адресов
      */
     public StreamServerSoung(List<String> socketAddresses) {
@@ -59,6 +57,7 @@ public class StreamServerSoung extends Thread {
 
     /**
      * Запуск сервера
+     *
      * @param ip адрес
      */
     public void start(InetSocketAddress ip) {
@@ -83,6 +82,7 @@ public class StreamServerSoung extends Thread {
 
         /**
          * клиент подключился
+         *
          * @param channel канал с подключенным клиентом
          */
         public void onClientConnectedIn(final Channel channel) {
@@ -98,6 +98,7 @@ public class StreamServerSoung extends Thread {
 
         /**
          * Клиент отключился
+         *
          * @param channel канал клиента
          */
         public void onClientDisconnected(Channel channel) {
@@ -111,8 +112,9 @@ public class StreamServerSoung extends Thread {
 
         /**
          * Обработчик ошибки с клиентом
+         *
          * @param channel канал клиента
-         * @param t ошибка
+         * @param t       ошибка
          */
         public void onExcaption(Channel channel, Throwable t) {
             channelGroup.remove(channel);

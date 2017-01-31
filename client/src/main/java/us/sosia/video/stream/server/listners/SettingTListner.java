@@ -1,8 +1,10 @@
 package us.sosia.video.stream.server.listners;
 
-import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Writter;
-import us.sosia.video.stream.server.models.*;
+import us.sosia.video.stream.server.models.Message;
+import us.sosia.video.stream.server.models.SettingTC;
+import us.sosia.video.stream.server.models.SettingTS;
+import us.sosia.video.stream.server.models.SettingTSO;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,19 +43,19 @@ public class SettingTListner extends MessageListner {
         setMessage(null);
 
         Wait(-1l);
-        for(;getMessage()==null;){
+        for (; getMessage() == null; ) {
             try {
                 Thread.sleep(100l);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        Message message=getMessage();
+        Message message = getMessage();
         setMessage(null);
-        return ((SettingTC)message.getData()).getLogins();
+        return ((SettingTC) message.getData()).getLogins();
     }
 
-    public void sendSetting(Writter writter,List<String> logins,Long idTranslator) {
+    public void sendSetting(Writter writter, List<String> logins, Long idTranslator) {
         Message message = new Message(true);
         message.setUuid(UUID.randomUUID());
         message.setType(SettingTSO.class.getName());

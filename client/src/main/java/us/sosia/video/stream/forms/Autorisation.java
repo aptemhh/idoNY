@@ -1,7 +1,6 @@
 package us.sosia.video.stream.forms;
 
 import us.sosia.video.stream.server.ConnectorServer;
-import us.sosia.video.stream.server.Person;
 import us.sosia.video.stream.server.listners.AutorisationListner;
 
 import javax.swing.*;
@@ -33,13 +32,10 @@ public class Autorisation extends JFrame {
                     ConnectorServer connectorServer = ConnectorServer.getInstate();
                     Boolean aBoolean = ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
                             BisnessLogic(connectorServer.getWritter(), textField1.getText(), new String(passwordField1.getPassword()));
-                    if(aBoolean)
-                    {
+                    if (aBoolean) {
                         Status.setText("Успешно");
                         Status.setForeground(Color.GREEN);
-                    }
-                    else
-                    {
+                    } else {
                         Status.setText("Проверьте лог/пас");
                         Status.setForeground(Color.RED);
                     }

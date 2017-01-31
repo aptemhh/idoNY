@@ -1,10 +1,8 @@
 package us.sosia.video.stream.server.listners;
 
-import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.CreateTC;
 import us.sosia.video.stream.server.models.CreateTS;
-import us.sosia.video.stream.server.models.Data;
 import us.sosia.video.stream.server.models.Message;
 
 import java.util.UUID;
@@ -41,15 +39,15 @@ public class CreateTListner extends MessageListner {
         mess.setData(createT);
         writter.write(mess);
         Wait(-1l);
-        for(;getMessage()==null;){
+        for (; getMessage() == null; ) {
             try {
                 Thread.sleep(100l);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        Message message=getMessage();
+        Message message = getMessage();
         setMessage(null);
-        return ((CreateTC)message.getData());
+        return ((CreateTC) message.getData());
     }
 }

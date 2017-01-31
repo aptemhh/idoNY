@@ -1,9 +1,9 @@
 package us.sosia.video.stream.server.listners;
 
-import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Person;
 import us.sosia.video.stream.server.Writter;
-import us.sosia.video.stream.server.models.*;
+import us.sosia.video.stream.server.models.Data;
+import us.sosia.video.stream.server.models.Message;
 
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
@@ -38,18 +38,18 @@ public class AutorisationListner extends MessageListner {
         mess.setData(createT);
         writter.write(mess);
         Wait(-1l);
-        for(;getMessage()==null;){
+        for (; getMessage() == null; ) {
             try {
                 Thread.sleep(100l);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        Message message=getMessage();
+        Message message = getMessage();
         setMessage(null);
-        Boolean aBoolean=message.getLogin()!=null;
-        Person person=Person.getInstanse();
-        if(aBoolean){
+        Boolean aBoolean = message.getLogin() != null;
+        Person person = Person.getInstanse();
+        if (aBoolean) {
             person.setLogin(login);
             person.setPassword(pass);
         }

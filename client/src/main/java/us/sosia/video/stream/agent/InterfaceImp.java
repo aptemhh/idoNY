@@ -1,17 +1,9 @@
 package us.sosia.video.stream.agent;
 
 import com.github.sarxos.webcam.Webcam;
-import com.xuggle.xuggler.IAudioSamples;
 import us.sosia.video.stream.agent.ui.VideoPanel;
-import us.sosia.video.stream.handler.StreamFrameListener;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 
 /**
  * Created by idony on 03.11.16.
@@ -30,6 +22,7 @@ public class InterfaceImp extends InterfaceProgramm {
 
     /**
      * Открыть видео трансляцию
+     *
      * @param videoPanel панель для видео
      * @param ip         адрес видео-сервера
      */
@@ -41,6 +34,7 @@ public class InterfaceImp extends InterfaceProgramm {
 
     /**
      * создать видео-трансляцию
+     *
      * @param ip адрес
      */
     public void startTranslutor(String ip) {

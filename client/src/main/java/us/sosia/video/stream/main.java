@@ -1,9 +1,9 @@
 package us.sosia.video.stream;
 
 import us.sosia.video.stream.forms.Autorisation;
+import us.sosia.video.stream.forms.ClientTranslator;
 import us.sosia.video.stream.forms.CreateTranslator;
 import us.sosia.video.stream.forms.FormManager;
-import us.sosia.video.stream.forms.ClientTranslator;
 import us.sosia.video.stream.server.ConnectorServer;
 
 import javax.swing.*;
