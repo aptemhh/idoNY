@@ -45,9 +45,9 @@ public class CreateTranslator  extends JFrame {
 //                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
 //                            BisnessLogic(connectorServer, "user","user");
                     CreateTC createTC = ((CreateTListner) connectorServer.getListner(CreateTListner.class)).
-                            BisnessLogic(connectorServer, Person.ip, Person.portT);
+                            BisnessLogic(connectorServer.getWritter(), Person.ip, Person.portT);
                     List<String> strings = ((SettingTListner) connectorServer.getListner(SettingTListner.class)).
-                            BisnessLogic(connectorServer);
+                            BisnessLogic(connectorServer.getWritter());
 
                     JPanel labPanel = new JPanel();
                     labPanel.setVisible(true);
@@ -106,7 +106,7 @@ public class CreateTranslator  extends JFrame {
                             strings.add(jCheckBox.getText());
                     }
                     ((SettingTListner) connectorServer.getListner(SettingTListner.class)).
-                            sendSetting(connectorServer, strings, IdTranslator);
+                            sendSetting(connectorServer.getWritter(), strings, IdTranslator);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

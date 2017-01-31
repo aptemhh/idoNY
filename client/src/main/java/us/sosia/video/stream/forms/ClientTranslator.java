@@ -37,10 +37,8 @@ public class ClientTranslator extends JFrame{
                 super.mousePressed(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
-//                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
-//                            BisnessLogic(connectorServer, "clop","clop");
-
-                    ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).BisnessLogic(connectorServer,"user");
+                    ConnectTC connectTC= ((ConnectTListner)connectorServer.getListner(ConnectTListner.class)).
+                            BisnessLogic(connectorServer.getWritter(),"user");
                     Person.keyP=connectTC.getKey();
 
                     InterfaceImp.getInterfaceImp().connectServerAdressAccept(new InetSocketAddress(connectTC.getIp(),Person.portP).getAddress(),Person.portP,connectTC.getKey());

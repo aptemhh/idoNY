@@ -1,6 +1,7 @@
 package us.sosia.video.stream.server.listners;
 
 import us.sosia.video.stream.server.ConnectorServer;
+import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.CreateTC;
 import us.sosia.video.stream.server.models.CreateTS;
 import us.sosia.video.stream.server.models.Data;
@@ -29,7 +30,7 @@ public class CreateTListner extends MessageListner {
         return null;
     }
 
-    public CreateTC BisnessLogic(ConnectorServer connectorServer,String ip,Integer port) throws TimeoutException {
+    public CreateTC BisnessLogic(Writter writter, String ip, Integer port) throws TimeoutException {
 
         Message mess = new Message(true);
         mess.setType(CreateTS.class.getName());
@@ -38,7 +39,7 @@ public class CreateTListner extends MessageListner {
         createT.setIp(ip);
         createT.setPort(port);
         mess.setData(createT);
-        connectorServer.write(mess);
+        writter.write(mess);
         Wait(-1l);
         for(;getMessage()==null;){
             try {

@@ -1,6 +1,7 @@
 package us.sosia.video.stream.server.listners;
 
 import us.sosia.video.stream.server.ConnectorServer;
+import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.*;
 
 import java.util.List;
@@ -28,14 +29,14 @@ public class SettingTListner extends MessageListner {
         return null;
     }
 
-    public List<String> BisnessLogic(ConnectorServer connectorServer) throws TimeoutException {
+    public List<String> BisnessLogic(Writter writter) throws TimeoutException {
 
         Message mess = new Message(true);
         mess.setType(SettingTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         SettingTS createT = new SettingTS();
         mess.setData(createT);
-        connectorServer.write(mess);
+        writter.write(mess);
 
         setMessage(null);
 
@@ -52,16 +53,15 @@ public class SettingTListner extends MessageListner {
         return ((SettingTC)message.getData()).getLogins();
     }
 
-    public void sendSetting(ConnectorServer connectorServer,List<String> logins,Long idTranslator)
-    {
-        Message message=new Message(true);
+    public void sendSetting(Writter writter,List<String> logins,Long idTranslator) {
+        Message message = new Message(true);
         message.setUuid(UUID.randomUUID());
         message.setType(SettingTSO.class.getName());
-        SettingTSO settingTSO=new SettingTSO();
+        SettingTSO settingTSO = new SettingTSO();
         settingTSO.setLogins(logins);
         settingTSO.setIdTranslator(idTranslator);
         message.setData(settingTSO);
-        connectorServer.write(message);
+        writter.write(message);
     }
 }
 

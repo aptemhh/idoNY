@@ -2,11 +2,13 @@ package us.sosia.video.stream.server.listners;
 
 import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Person;
+import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.ConnectTC;
 import us.sosia.video.stream.server.models.ConnectTS;
 import us.sosia.video.stream.server.models.Data;
 import us.sosia.video.stream.server.models.Message;
 
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
@@ -30,7 +32,7 @@ public class ConnectTListner extends MessageListner {
         return null;
     }
 
-    public ConnectTC BisnessLogic(ConnectorServer connectorServer,String loginTranslator) throws TimeoutException {
+    public ConnectTC BisnessLogic(Writter writter, String loginTranslator) throws TimeoutException {
 
         Message mess = new Message(true);
         mess.setType(ConnectTS.class.getName());
@@ -38,7 +40,7 @@ public class ConnectTListner extends MessageListner {
         ConnectTS createT = new ConnectTS();
         createT.setLogin(loginTranslator);
         mess.setData(createT);
-        connectorServer.write(mess);
+        writter.write(mess);
         Wait(-1l);
         for(;getMessage()==null;){
             try {

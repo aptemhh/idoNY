@@ -42,6 +42,7 @@ public class ConnectorServer extends MessageListners {
     protected final static Logger logger = LoggerFactory.getLogger(StreamClientAgent.class);
     protected final Bootstrap clientBootstrap;
     protected Channel clientChannel;
+    private Writter writter = new WritterImp();
     EventLoopGroup bossGroup;
 
     private ConnectorServer() {
@@ -49,6 +50,10 @@ public class ConnectorServer extends MessageListners {
         this.clientBootstrap = new Bootstrap();
         setting();
         addListners();
+    }
+
+    public Writter getWritter() {
+        return writter;
     }
 
     /**
@@ -137,24 +142,27 @@ public class ConnectorServer extends MessageListners {
         }
     }
 
-    /**
-     * писать серверу
-     * @param mess объект
-     * @return true успешно, false нет
-     */
-    public synchronized boolean write(Object mess) {
-        if (clientChannel != null) {
-            try {
-                StringWriter stringWriter = new StringWriter();
-                JAXB.marshal(stringWriter, mess, mess.getClass(), ((Message) mess).getData().getClass());
-                ChannelFuture future = null;
-                future = clientChannel.write(stringWriter.getBuffer().toString());
-                logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
-                return true;
-            } catch (JAXBException e) {
-                e.printStackTrace();
+    private class WritterImp implements Writter
+    {
+        /**
+         * писать серверу
+         * @param mess объект
+         * @return true успешно, false нет
+         */
+        public synchronized boolean write(Object mess) {
+            if (clientChannel != null) {
+                try {
+                    StringWriter stringWriter = new StringWriter();
+                    JAXB.marshal(stringWriter, mess, mess.getClass(), ((Message) mess).getData().getClass());
+                    ChannelFuture future = null;
+                    future = clientChannel.write(stringWriter.getBuffer().toString());
+                    logger.info("Отправлено :\n--------{}-------", stringWriter.getBuffer().toString());
+                    return true;
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
             }
+            return false;
         }
-        return false;
     }
 }

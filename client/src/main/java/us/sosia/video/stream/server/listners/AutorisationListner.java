@@ -2,6 +2,7 @@ package us.sosia.video.stream.server.listners;
 
 import us.sosia.video.stream.server.ConnectorServer;
 import us.sosia.video.stream.server.Person;
+import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.*;
 
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class AutorisationListner extends MessageListner {
         return null;
     }
 
-    public Boolean BisnessLogic(ConnectorServer connectorServer,String login,String pass) throws TimeoutException {
+    public Boolean BisnessLogic(Writter writter, String login, String pass) throws TimeoutException {
 
         Message mess = new Message();
         mess.setType(Data.class.getName());
@@ -35,7 +36,7 @@ public class AutorisationListner extends MessageListner {
         mess.setLogin(login);
         mess.setPass(pass);
         mess.setData(createT);
-        connectorServer.write(mess);
+        writter.write(mess);
         Wait(-1l);
         for(;getMessage()==null;){
             try {
