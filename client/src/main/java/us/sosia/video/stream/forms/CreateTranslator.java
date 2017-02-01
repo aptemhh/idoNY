@@ -40,12 +40,10 @@ public class CreateTranslator extends JFrame {
                 super.mouseClicked(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
-//                    ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
-//                            BisnessLogic(connectorServer, "user","user");
-                    CreateTC createTC = ((CreateTListner) connectorServer.getListner(CreateTListner.class)).
-                            BisnessLogic(connectorServer.getWritter(), Person.ip, Person.portT);
-                    List<String> strings = ((SettingTListner) connectorServer.getListner(SettingTListner.class)).
-                            BisnessLogic(connectorServer.getWritter());
+                    CreateTC createTC = (CreateTC) connectorServer.getListner(CreateTListner.class).
+                            BisnessLogic(connectorServer.getWritter(),new Object[]{ Person.ip, Person.portT});
+                    List<String> strings = (List<String>) connectorServer.getListner(SettingTListner.class).
+                            BisnessLogic(connectorServer.getWritter(),null);
 
                     JPanel labPanel = new JPanel();
                     labPanel.setVisible(true);

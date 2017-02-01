@@ -14,83 +14,101 @@
             <url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
         </repository>
     </repositories>
-<dependencies>
-    <dependency>
-        <groupId>com.github.sarxos</groupId>
-        <artifactId>webcam-capture-driver-fswebcam</artifactId>
-        <version>0.3.11</version>
-    </dependency>
-    <dependency>
-        <groupId>com.github.sarxos</groupId>
-        <artifactId>webcam-capture</artifactId>
-        <version>0.3.11</version>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture-driver-fswebcam</artifactId>
+            <version>0.3.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+            <version>0.3.11</version>
+        </dependency>
 
-    <dependency>
-        <groupId>org.openimaj</groupId>
-        <artifactId>xuggle-video</artifactId>
-        <version>1.3.5</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openimaj</groupId>
-        <artifactId>core-audio</artifactId>
-        <version>1.3.5</version>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-jdk14</artifactId>
-        <version>1.7.3</version>
-    </dependency>
+        <dependency>
+            <groupId>org.openimaj</groupId>
+            <artifactId>xuggle-video</artifactId>
+            <version>1.3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openimaj</groupId>
+            <artifactId>core-audio</artifactId>
+            <version>1.3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.3</version>
+        </dependency>
 
-    <dependency>
-        <groupId>net.coobird</groupId>
-        <artifactId>thumbnailator</artifactId>
-        <version>0.4.8</version>
-    </dependency>
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
 
-    <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.0.9</version>
-        <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.9</version>
+            <scope>provided</scope>
+        </dependency>
 
-    <dependency>
-        <groupId>org.jboss.netty</groupId>
-        <artifactId>netty</artifactId>
-        <version>3.2.9.Final</version>
-    </dependency>
+        <dependency>
+            <groupId>org.jboss.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>3.2.9.Final</version>
+        </dependency>
 
-    <dependency>
-        <groupId>com.intellij</groupId>
-        <artifactId>forms_rt</artifactId>
-        <version>7.0.3</version>
-    </dependency>
-    <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>2.2.11</version>
-    </dependency>
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>forms_rt</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.2.11</version>
+        </dependency>
 
-    <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty</artifactId>
-        <version>4.0.0.Alpha8</version>
-    </dependency>
-    <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty-transport</artifactId>
-        <version>5.0.0.Alpha2</version>
-    </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>4.0.0.Alpha8</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport</artifactId>
+            <version>5.0.0.Alpha2</version>
+        </dependency>
 
-    <dependency>
-        <groupId>org.gagravarr</groupId>
-        <artifactId>vorbis-java-core</artifactId>
-        <version>0.8</version>
-    </dependency>
+        <dependency>
+            <groupId>org.gagravarr</groupId>
+            <artifactId>vorbis-java-core</artifactId>
+            <version>0.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 
-</dependencies>
+    </dependencies>
     <build>
         <finalName>client</finalName>
         <plugins>
