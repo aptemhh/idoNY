@@ -24,15 +24,17 @@ public class SettingTListner extends MessageListner {
         return false;
     }
 
-
-
     @Override
     Object doAfter() {
         Message message = getMessage();
-        setMessage(null);
         return ((SettingTC) message.getData()).getLogins();
     }
 
+    /**
+     *
+     * @param objects пустой
+     * @return
+     */
     @Override
     Message doBefore(Object[] objects) {
         Message mess = new Message(true);

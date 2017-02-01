@@ -21,13 +21,21 @@ public class CreateTListner extends MessageListner {
         return false;
     }
 
+    /**
+     *
+     * @return CreateTC
+     */
     @Override
     Object doAfter() {
         Message message = getMessage();
-        setMessage(null);
         return message.getData();
     }
 
+    /**
+     *
+     * @param objects string ip, integer port
+     * @return
+     */
     @Override
     Message doBefore(Object[] objects) {
         Message mess = new Message(true);

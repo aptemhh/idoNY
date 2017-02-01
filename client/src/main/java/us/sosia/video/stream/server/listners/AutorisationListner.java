@@ -24,10 +24,13 @@ public class AutorisationListner extends MessageListner {
         return false;
     }
 
+    /**
+     *
+     * @return true - проверка успешна
+     */
     @Override
     Object doAfter() {
         Message message = getMessage();
-        setMessage(null);
         Boolean aBoolean = message.getLogin() != null;
         Person person = Person.getInstanse();
         if (aBoolean) {
@@ -37,6 +40,11 @@ public class AutorisationListner extends MessageListner {
         return aBoolean;
     }
 
+    /**
+     *
+     * @param objects string логин, пароль
+     * @return
+     */
     @Override
     Message doBefore(Object[] objects) {
         login = (String) objects[0];

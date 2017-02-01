@@ -24,10 +24,14 @@ public class ConnectTListner extends MessageListner {
     @Override
     Object doAfter() {
         Message message = getMessage();
-        setMessage(null);
         return message.getData();
     }
 
+    /**
+     *
+     * @param objects string логин, к которому хотим подключиться
+     * @return
+     */
     @Override
     Message doBefore(Object[] objects) {
         Message mess = new Message(true);

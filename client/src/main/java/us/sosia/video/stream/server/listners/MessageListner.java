@@ -19,9 +19,14 @@ public abstract class MessageListner {
     int i = 0;
 
     abstract Boolean checkMessage(Message message);
+
     abstract Object doAfter();
+
     abstract Message doBefore(Object[] objects);
-    Message answerMessage(Message message){return null;}
+
+    Message answerMessage(Message message) {
+        return null;
+    }
 
     public void Notify() {
         synchronized (monitor) {
@@ -54,22 +59,17 @@ public abstract class MessageListner {
         this.message = message;
     }
 
-    public Object BisnessLogic(Writter writter,Object[] objects) throws TimeoutException {
+    public Object BisnessLogic(Writter writter, Object[] objects) throws TimeoutException {
         writter.write(doBefore(objects));
         Wait(-1l);
-        for (; getMessage() == null; ) {
-            try {
-                Thread.sleep(100l);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return doAfter();
+        Object o=doAfter();
+        setMessage(null);
+        return o;
     }
 
     public Message reader(Message message) {
         if (message == null || message.getUuid() == null || current == null) return null;
-        if (current.equals(message.getUuid())&&checkMessage(message)) {
+        if (current.equals(message.getUuid()) && checkMessage(message)) {
             setMessage(message);
             Notify();
         } else {
