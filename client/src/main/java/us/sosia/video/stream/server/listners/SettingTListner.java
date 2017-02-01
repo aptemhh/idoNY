@@ -17,42 +17,30 @@ import java.util.concurrent.TimeoutException;
 public class SettingTListner extends MessageListner {
 
 
-    public Message reader(Message message) {
-        if (message == null || message.getUuid() == null || current == null) return null;
-        if (message.getData() != null && message.getType().equals(SettingTC.class.getName())) {
-            if (current.equals(message.getUuid())) {
-                setMessage(message);
-                Notify();
-            } else {
-                logger.error("UUID не совпадают!!!");
-            }
-        }
-
-        return null;
+    @Override
+    Boolean checkMessage(Message message) {
+        if (message.getData() != null && message.getType().equals(SettingTC.class.getName()))
+           return true;
+        return false;
     }
 
-    public List<String> BisnessLogic(Writter writter) throws TimeoutException {
 
+
+    @Override
+    Object doAfter() {
+        Message message = getMessage();
+        setMessage(null);
+        return ((SettingTC) message.getData()).getLogins();
+    }
+
+    @Override
+    Message doBefore(Object[] objects) {
         Message mess = new Message(true);
         mess.setType(SettingTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         SettingTS createT = new SettingTS();
         mess.setData(createT);
-        writter.write(mess);
-
-        setMessage(null);
-
-        Wait(-1l);
-        for (; getMessage() == null; ) {
-            try {
-                Thread.sleep(100l);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Message message = getMessage();
-        setMessage(null);
-        return ((SettingTC) message.getData()).getLogins();
+        return mess;
     }
 
     public void sendSetting(Writter writter, List<String> logins, Long idTranslator) {

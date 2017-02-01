@@ -30,8 +30,8 @@ public class Autorisation extends JFrame {
 
                 try {
                     ConnectorServer connectorServer = ConnectorServer.getInstate();
-                    Boolean aBoolean = ((AutorisationListner) connectorServer.getListner(AutorisationListner.class)).
-                            BisnessLogic(connectorServer.getWritter(), textField1.getText(), new String(passwordField1.getPassword()));
+                    Boolean aBoolean = (Boolean) connectorServer.getListner(AutorisationListner.class).
+                            BisnessLogic(connectorServer.getWritter(),new Object[]{ textField1.getText(), new String(passwordField1.getPassword())});
                     if (aBoolean) {
                         Status.setText("Успешно");
                         Status.setForeground(Color.GREEN);

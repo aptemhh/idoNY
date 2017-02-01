@@ -99,15 +99,15 @@ public class StreamServerAgent implements IStreamServerAgent {
                     inetSocketAddress.equals(((InetSocketAddress) channel.getRemoteAddress()).getHostName()))) {
                 logger.info("Подключился :" + ((InetSocketAddress) channel.getRemoteAddress()).getHostName());
                 channelGroup.add(channel);
-            }
 
-            if (!isStreaming) {
-                Runnable imageGrabTask = new ImageGrabTask();
-                ScheduledFuture<?> imageGrabFuture =
-                        timeWorker.scheduleWithFixedDelay(imageGrabTask, 0,
-                                1000 / FPS, TimeUnit.MILLISECONDS);
-                imageGrabTaskFuture = imageGrabFuture;
-                isStreaming = true;
+                if (!isStreaming) {
+                    Runnable imageGrabTask = new ImageGrabTask();
+                    ScheduledFuture<?> imageGrabFuture =
+                            timeWorker.scheduleWithFixedDelay(imageGrabTask, 0,
+                                    1000 / FPS, TimeUnit.MILLISECONDS);
+                    imageGrabTaskFuture = imageGrabFuture;
+                    isStreaming = true;
+                }
             }
         }
 

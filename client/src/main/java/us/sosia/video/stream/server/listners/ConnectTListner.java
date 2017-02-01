@@ -14,39 +14,28 @@ import java.util.concurrent.TimeoutException;
  */
 public class ConnectTListner extends MessageListner {
 
-
-    public Message reader(Message message) {
-        if (message == null || message.getUuid() == null || current == null) return null;
-        if (message.getData() != null && message.getType().equals(ConnectTC.class.getName())) {
-            if (current.equals(message.getUuid())) {
-                setMessage(message);
-                Notify();
-            } else {
-                logger.error("UUID не совпадают!!!");
-            }
-        }
-        return null;
+    @Override
+    Boolean checkMessage(Message message) {
+        if (message.getData() != null && message.getType().equals(ConnectTC.class.getName()))
+            return true;
+        return false;
     }
 
-    public ConnectTC BisnessLogic(Writter writter, String loginTranslator) throws TimeoutException {
+    @Override
+    Object doAfter() {
+        Message message = getMessage();
+        setMessage(null);
+        return message.getData();
+    }
 
+    @Override
+    Message doBefore(Object[] objects) {
         Message mess = new Message(true);
         mess.setType(ConnectTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         ConnectTS createT = new ConnectTS();
-        createT.setLogin(loginTranslator);
+        createT.setLogin((String)objects[0]);
         mess.setData(createT);
-        writter.write(mess);
-        Wait(-1l);
-        for (; getMessage() == null; ) {
-            try {
-                Thread.sleep(100l);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Message message = getMessage();
-        setMessage(null);
-        return (ConnectTC) message.getData();
+        return mess;
     }
 }

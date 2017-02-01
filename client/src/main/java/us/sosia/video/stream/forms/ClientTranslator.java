@@ -36,13 +36,11 @@ public class ClientTranslator extends JFrame {
                 super.mousePressed(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
-                    ConnectTC connectTC = ((ConnectTListner) connectorServer.getListner(ConnectTListner.class)).
-                            BisnessLogic(connectorServer.getWritter(), "user");
+                    ConnectTC connectTC = (ConnectTC) connectorServer.getListner(ConnectTListner.class).
+                            BisnessLogic(connectorServer.getWritter(),new Object[]{ "user"});
                     Person.keyP = connectTC.getKey();
-
                     InterfaceImp.getInterfaceImp().connectServerAdressAccept(new InetSocketAddress(connectTC.getIp(), Person.portP).getAddress(), Person.portP, connectTC.getKey());
                     InterfaceImp.getInterfaceImp().openTranslutor(videoPanel, connectTC.getIp());
-
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

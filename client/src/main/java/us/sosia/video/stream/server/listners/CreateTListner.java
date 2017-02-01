@@ -14,40 +14,29 @@ import java.util.concurrent.TimeoutException;
  */
 public class CreateTListner extends MessageListner {
 
-
-    public Message reader(Message message) {
-        if (message == null || message.getUuid() == null || current == null) return null;
-        if (message.getData() != null && message.getType().equals(CreateTC.class.getName())) {
-            if (current.equals(message.getUuid())) {
-                setMessage(message);
-                Notify();
-            } else {
-                logger.error("UUID не совпадают!!!");
-            }
-        }
-        return null;
+    @Override
+    Boolean checkMessage(Message message) {
+        if (message.getData() != null && message.getType().equals(CreateTC.class.getName()))
+            return true;
+        return false;
     }
 
-    public CreateTC BisnessLogic(Writter writter, String ip, Integer port) throws TimeoutException {
+    @Override
+    Object doAfter() {
+        Message message = getMessage();
+        setMessage(null);
+        return message.getData();
+    }
 
+    @Override
+    Message doBefore(Object[] objects) {
         Message mess = new Message(true);
         mess.setType(CreateTS.class.getName());
         mess.setUuid(current = UUID.randomUUID());
         CreateTS createT = new CreateTS();
-        createT.setIp(ip);
-        createT.setPort(port);
+        createT.setIp((String)objects[0]);
+        createT.setPort((Integer) objects[1]);
         mess.setData(createT);
-        writter.write(mess);
-        Wait(-1l);
-        for (; getMessage() == null; ) {
-            try {
-                Thread.sleep(100l);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Message message = getMessage();
-        setMessage(null);
-        return ((CreateTC) message.getData());
+        return mess;
     }
 }
