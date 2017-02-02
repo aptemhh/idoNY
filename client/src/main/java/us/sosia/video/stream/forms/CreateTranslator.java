@@ -24,9 +24,9 @@ import java.util.List;
  */
 public class CreateTranslator extends JFrame {
     private JPanel panel1;
-    private JButton одобритьButton;
-    private JButton создатьButton;
-    private JButton отключитьButton;
+    private JButton sacresButton;
+    private JButton createTButton;
+    private JButton closeButton;
     private JScrollPane scrolpan;
     private Long IdTranslator;
     private List<JCheckBox> jCheckBoxes = new ArrayList<JCheckBox>();
@@ -34,16 +34,16 @@ public class CreateTranslator extends JFrame {
     public CreateTranslator() throws HeadlessException {
         super();
         setContentPane(panel1);
-        создатьButton.addMouseListener(new MouseAdapter() {
+        createTButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
                     CreateTC createTC = (CreateTC) connectorServer.getListner(CreateTListner.class).
-                            BisnessLogic(connectorServer.getWritter(),new Object[]{ Person.ip, Person.portT});
+                            BisnessLogic(connectorServer.getWritter(), new Object[]{Person.ip, Person.portT});
                     List<String> strings = (List<String>) connectorServer.getListner(SettingTListner.class).
-                            BisnessLogic(connectorServer.getWritter(),null);
+                            BisnessLogic(connectorServer.getWritter(), null);
 
                     JPanel labPanel = new JPanel();
                     labPanel.setVisible(true);
@@ -87,7 +87,7 @@ public class CreateTranslator extends JFrame {
                 }
             }
         });
-        одобритьButton.addMouseListener(new MouseAdapter() {
+        sacresButton.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -106,7 +106,7 @@ public class CreateTranslator extends JFrame {
                 }
             }
         });
-        отключитьButton.addMouseListener(new MouseAdapter() {
+        closeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);

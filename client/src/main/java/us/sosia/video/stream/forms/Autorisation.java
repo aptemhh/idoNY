@@ -15,23 +15,23 @@ import java.util.concurrent.TimeoutException;
 public class Autorisation extends JFrame {
     private JPanel panel1;
     private JTextField textField1;
-    private JButton подключитьсяButton;
+    private JButton connectButton;
     private JPasswordField passwordField1;
     private JLabel Status;
-    private JButton создатьТрансляциюButton;
-    private JButton подключитьсяКТрансляцииButton;
+    private JButton createTButton;
+    private JButton connectTButton;
 
     public Autorisation() throws HeadlessException {
         super();
         setContentPane(panel1);
-        подключитьсяButton.addMouseListener(new MouseAdapter() {
+        connectButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
 
                 try {
                     ConnectorServer connectorServer = ConnectorServer.getInstate();
                     Boolean aBoolean = (Boolean) connectorServer.getListner(AutorisationListner.class).
-                            BisnessLogic(connectorServer.getWritter(),new Object[]{ textField1.getText(), new String(passwordField1.getPassword())});
+                            BisnessLogic(connectorServer.getWritter(), new Object[]{textField1.getText(), new String(passwordField1.getPassword())});
                     if (aBoolean) {
                         Status.setText("Успешно");
                         Status.setForeground(Color.GREEN);
@@ -48,14 +48,14 @@ public class Autorisation extends JFrame {
             }
         });
         pack();
-        создатьТрансляциюButton.addMouseListener(new MouseAdapter() {
+        createTButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 FormManager.show(CreateTranslator.class);
             }
         });
-        подключитьсяКТрансляцииButton.addMouseListener(new MouseAdapter() {
+        connectTButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);

@@ -64,11 +64,8 @@
               <forms defaultalign-horz="false"/>
             </constraints>
             <properties/>
-            <clientProperties>
-              <caretAspectRatio class="java.lang.Float" value="0.04"/>
-            </clientProperties>
           </component>
-          <component id="6c37f" class="javax.swing.JButton" binding="подключитьсяButton" default-binding="true">
+          <component id="6c37f" class="javax.swing.JButton" binding="connectTButton">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <forms/>
@@ -77,7 +74,7 @@
               <text value="Подключиться"/>
             </properties>
           </component>
-          <component id="c47cb" class="javax.swing.JButton" binding="отключитьсяButton" default-binding="true">
+          <component id="c47cb" class="javax.swing.JButton" binding="disconnectTButton">
             <constraints>
               <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <forms/>
@@ -103,7 +100,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="7efa2" class="javax.swing.JButton" binding="отклЗвукButton" default-binding="true">
+          <component id="7efa2" class="javax.swing.JButton" binding="audioButton">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
               <forms/>
@@ -112,7 +109,7 @@
               <text value="Откл. звук"/>
             </properties>
           </component>
-          <component id="fd6f2" class="javax.swing.JButton" binding="отклВидеоButton" default-binding="true">
+          <component id="fd6f2" class="javax.swing.JButton" binding="videoButton">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <forms/>

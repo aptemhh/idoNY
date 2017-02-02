@@ -50,7 +50,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="40292" class="javax.swing.JButton" binding="одобритьButton" default-binding="true">
+              <component id="40292" class="javax.swing.JButton" binding="sacresButton">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -59,7 +59,7 @@
                   <text value="Одобрить"/>
                 </properties>
               </component>
-              <component id="159fc" class="javax.swing.JButton" binding="отключитьButton" default-binding="true">
+              <component id="159fc" class="javax.swing.JButton" binding="closeButton">
                 <constraints>
                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -68,7 +68,7 @@
                   <text value="Отключить"/>
                 </properties>
               </component>
-              <component id="7923f" class="javax.swing.JButton" binding="создатьButton" default-binding="true">
+              <component id="7923f" class="javax.swing.JButton" binding="createTButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>

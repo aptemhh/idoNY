@@ -1,7 +1,5 @@
 package us.sosia.video.stream.server.listners;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.Message;
 
@@ -20,10 +18,27 @@ public abstract class MessageListner {
 
     abstract Boolean checkMessage(Message message);
 
-    abstract Object doAfter();
+    /**
+     * формирование ответа
+     *
+     * @return
+     */
+    abstract Object doAfter(Message message);
 
+    /**
+     * Формирование запроса
+     *
+     * @param objects у каждой реализациия
+     * @return сообщение, которое
+     */
     abstract Message doBefore(Object[] objects);
 
+    /**
+     * ответ при получении сообщения
+     *
+     * @param message
+     * @return
+     */
     Message answerMessage(Message message) {
         return null;
     }
@@ -59,14 +74,28 @@ public abstract class MessageListner {
         this.message = message;
     }
 
+    /**
+     * бизнесс логика
+     *
+     * @param writter писатель
+     * @param objects входные данные
+     * @return ответ
+     * @throws TimeoutException
+     */
     public Object BisnessLogic(Writter writter, Object[] objects) throws TimeoutException {
         writter.write(doBefore(objects));
         Wait(-1l);
-        Object o=doAfter();
+        Object o = doAfter(getMessage());
         setMessage(null);
         return o;
     }
 
+    /**
+     * Читатель
+     *
+     * @param message сообщение
+     * @return
+     */
     public Message reader(Message message) {
         if (message == null || message.getUuid() == null || current == null) return null;
         if (current.equals(message.getUuid()) && checkMessage(message)) {

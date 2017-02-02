@@ -1,4 +1,4 @@
-package test;
+package us.sosia.video.stream.server.listners;
 
 import org.junit.Assert;
 import us.sosia.video.stream.server.Writter;
@@ -26,6 +26,7 @@ public class AutorisationListnerTest {
         Writter writter = new WritterImp();
         Assert.assertTrue((Boolean) autorisationListner.BisnessLogic(writter, new Object[]{"test", "test2"}));
     }
+
     private class WritterImp implements Writter {
 
         @Override

@@ -20,24 +20,24 @@ public class ClientTranslator extends JFrame {
     private JPanel panel1;
     private JButton button6456tyutyutyutuButton;
     private JTextField textField1;
-    private JButton подключитьсяButton;
-    private JButton отключитьсяButton;
-    private JButton отклЗвукButton;
-    private JButton отклВидеоButton;
+    private JButton connectTButton;
+    private JButton disconnectTButton;
+    private JButton audioButton;
+    private JButton videoButton;
     private VideoPanel videoPanel = new VideoPanel();
 
     public ClientTranslator() {
         setContentPane(panel1);
         panel1.add(videoPanel, BorderLayout.CENTER);
 
-        подключитьсяButton.addMouseListener(new MouseAdapter() {
+        connectTButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 ConnectorServer connectorServer = ConnectorServer.getInstate();
                 try {
                     ConnectTC connectTC = (ConnectTC) connectorServer.getListner(ConnectTListner.class).
-                            BisnessLogic(connectorServer.getWritter(),new Object[]{ "user"});
+                            BisnessLogic(connectorServer.getWritter(), new Object[]{"user"});
                     Person.keyP = connectTC.getKey();
                     InterfaceImp.getInterfaceImp().connectServerAdressAccept(new InetSocketAddress(connectTC.getIp(), Person.portP).getAddress(), Person.portP, connectTC.getKey());
                     InterfaceImp.getInterfaceImp().openTranslutor(videoPanel, connectTC.getIp());
@@ -46,14 +46,14 @@ public class ClientTranslator extends JFrame {
                 }
             }
         });
-        отключитьсяButton.addMouseListener(new MouseAdapter() {
+        disconnectTButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 InterfaceImp.getInterfaceImp().stopClientTranslator();
             }
         });
-        отклВидеоButton.addMouseListener(new MouseAdapter() {
+        videoButton.addMouseListener(new MouseAdapter() {
             String s = "Вкл. видео", s2 = "Выкл. видео";
 
             @Override
@@ -61,15 +61,15 @@ public class ClientTranslator extends JFrame {
                 super.mouseClicked(e);
                 if (videoPanel.getVisable()) {
                     videoPanel.setVisable(false);
-                    отклВидеоButton.setText(s);
+                    videoButton.setText(s);
                 } else {
                     videoPanel.setVisable(true);
-                    отклВидеоButton.setText(s2);
+                    videoButton.setText(s2);
                 }
 
             }
         });
-        отклЗвукButton.addMouseListener(new MouseAdapter() {
+        audioButton.addMouseListener(new MouseAdapter() {
             String s = "Вкл. звук", s2 = "Выкл. звук";
 
             @Override
@@ -77,10 +77,10 @@ public class ClientTranslator extends JFrame {
                 super.mouseClicked(e);
                 if (InterfaceImp.getInterfaceImp().getAudio()) {
                     InterfaceImp.getInterfaceImp().setAudio(false);
-                    отклЗвукButton.setText(s);
+                    audioButton.setText(s);
                 } else {
                     InterfaceImp.getInterfaceImp().setAudio(true);
-                    отклЗвукButton.setText(s2);
+                    audioButton.setText(s2);
                 }
             }
         });
@@ -94,5 +94,6 @@ public class ClientTranslator extends JFrame {
         form.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    private void createUIComponents() {}
+    private void createUIComponents() {
+    }
 }

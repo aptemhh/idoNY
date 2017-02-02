@@ -29,11 +29,8 @@
             <properties>
               <text value="user"/>
             </properties>
-            <clientProperties>
-              <caretAspectRatio class="java.lang.Float" value="0.04"/>
-            </clientProperties>
           </component>
-          <component id="84ab5" class="javax.swing.JButton" binding="подключитьсяButton" default-binding="true">
+          <component id="84ab5" class="javax.swing.JButton" binding="connectButton">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -58,9 +55,6 @@
             <properties>
               <text value="user"/>
             </properties>
-            <clientProperties>
-              <caretAspectRatio class="java.lang.Float" value="0.04"/>
-            </clientProperties>
           </component>
           <component id="8301b" class="javax.swing.JLabel" binding="Status">
             <constraints>
@@ -78,7 +72,7 @@
               <text value="Пароль"/>
             </properties>
           </component>
-          <component id="bb1a4" class="javax.swing.JButton" binding="подключитьсяКТрансляцииButton" default-binding="true">
+          <component id="bb1a4" class="javax.swing.JButton" binding="connectTButton">
             <constraints>
               <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -86,7 +80,7 @@
               <text value="Подключиться к трансляции"/>
             </properties>
           </component>
-          <component id="d701b" class="javax.swing.JButton" binding="создатьТрансляциюButton" default-binding="true">
+          <component id="d701b" class="javax.swing.JButton" binding="createTButton">
             <constraints>
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>

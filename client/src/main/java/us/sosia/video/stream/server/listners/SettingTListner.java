@@ -8,7 +8,6 @@ import us.sosia.video.stream.server.models.SettingTSO;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 05.01.17.
@@ -20,18 +19,16 @@ public class SettingTListner extends MessageListner {
     @Override
     Boolean checkMessage(Message message) {
         if (message.getData() != null && message.getType().equals(SettingTC.class.getName()))
-           return true;
+            return true;
         return false;
     }
 
     @Override
-    Object doAfter() {
-        Message message = getMessage();
+    Object doAfter(Message message) {
         return ((SettingTC) message.getData()).getLogins();
     }
 
     /**
-     *
      * @param objects пустой
      * @return
      */

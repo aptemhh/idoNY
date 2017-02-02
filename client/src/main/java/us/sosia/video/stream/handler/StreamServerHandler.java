@@ -37,7 +37,7 @@ public class StreamServerHandler extends SimpleChannelHandler {
     }
 
     /**
-     * в канале ошибка
+     * канал создан
      *
      * @param ctx канал
      * @param e   статус

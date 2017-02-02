@@ -1,12 +1,10 @@
 package us.sosia.video.stream.server.listners;
 
 import us.sosia.video.stream.server.Person;
-import us.sosia.video.stream.server.Writter;
 import us.sosia.video.stream.server.models.Data;
 import us.sosia.video.stream.server.models.Message;
 
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by idony on 06.01.17.
@@ -25,12 +23,10 @@ public class AutorisationListner extends MessageListner {
     }
 
     /**
-     *
      * @return true - проверка успешна
      */
     @Override
-    Object doAfter() {
-        Message message = getMessage();
+    Object doAfter(Message message) {
         Boolean aBoolean = message.getLogin() != null;
         Person person = Person.getInstanse();
         if (aBoolean) {
@@ -41,7 +37,6 @@ public class AutorisationListner extends MessageListner {
     }
 
     /**
-     *
      * @param objects string логин, пароль
      * @return
      */

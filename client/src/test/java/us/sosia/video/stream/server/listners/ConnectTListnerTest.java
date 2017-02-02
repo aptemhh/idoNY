@@ -1,4 +1,4 @@
-package test;
+package us.sosia.video.stream.server.listners;
 
 import org.junit.Assert;
 import us.sosia.video.stream.server.Writter;
