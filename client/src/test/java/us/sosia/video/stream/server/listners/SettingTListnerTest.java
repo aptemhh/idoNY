@@ -36,21 +36,4 @@ public class SettingTListnerTest {
         message.setType(SettingTC.class.getName());
         Assert.assertTrue(listner.checkMessage(message));
     }
-    private class WritterImp implements Writter {
-
-        @Override
-        public boolean write(Object mess) {
-            Message message=(Message)mess;
-            CreateTC connectTC=new CreateTC();
-            message.setType(CreateTC.class.getName());
-            if(((CreateTS)message.getData()).getIp().equals("0.0.0.0"))
-            {
-                connectTC.setIdTranslator(3l);
-                connectTC.setKey("qwefd#wer");
-            }
-            message.setData(connectTC);
-            listner.reader(message);
-            return false;
-        }
-    }
 }
